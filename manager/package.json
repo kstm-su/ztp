@@ -1,0 +1,14 @@
+{
+  "name": "manager",
+  "version": "1.0.0",
+  "description": "ZTP manager",
+  "main": "index.js",
+  "author": "kstm@shinshu-u.ac.jp",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "sequelize": "^4.6.0",
+    "sqlite3": "^3.1.9"
+  }
+}
