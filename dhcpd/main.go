@@ -3,42 +3,57 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/bgpat/dhcpd/server"
+	dhcp "github.com/krolaw/dhcp4"
 	"github.com/parnurzeal/gorequest"
 )
 
 type node struct {
-	id         int
-	name       string
-	macAddress string `json:"mac_address"`
-	ipAddress  string `json:"ip_address"`
-	image      image
+	ID         int    `json:"id"`
+	Name       string `json:"name"`
+	MACAddress string `json:"mac_address"`
+	IPAddress  string `json:"ip_address"`
+	Image      image  `json:"image"`
 }
 
 type image struct {
-	id          int
-	path        string
-	config      string
-	name        string
-	description string
+	ID          int    `json:"id"`
+	Path        string `json:"path"`
+	Config      string `json:"config"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 func main() {
 	apiURL := os.Getenv("API_URL")
+	cache := map[string]server.Reply{}
 	s, err := server.New(func(lease *server.Lease) server.Reply {
 		fmt.Printf("lease: %+v\n", lease)
+		macAddr := lease.CHAddr.String()
+		if reply, ok := cache[macAddr]; ok {
+			return reply
+		}
+		cache[macAddr] = nil
 		nodes := []node{}
 		_, _, err := gorequest.New().Get(apiURL + "/nodes").EndStruct(&nodes)
 		if err != nil {
 			fmt.Println(err)
 			return &server.NAKReply{}
 		}
-		macAddr := lease.CHAddr.String()
 		for _, node := range nodes {
-			if node.macAddress == macAddr {
+			if strings.ToLower(node.MACAddress) == macAddr {
 				fmt.Printf("node: %+v\n", node)
-				return nil
+				reply := &server.ACKReply{
+					Lease: lease,
+					Options: dhcp.Options{
+						dhcp.OptionBootFileName: []byte(node.Image.Path),
+					},
+				}
+				fmt.Printf("reply: %+v\n", reply)
+				cache[macAddr] = reply
+				return reply
 			}
 		}
 		return nil
