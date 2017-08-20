@@ -26,9 +26,7 @@ var webpackConfig = merge(baseWebpackConfig, {
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
-    new webpack.DefinePlugin({
-      'process.env': env
-    }),
+    new webpack.EnvironmentPlugin(env),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false

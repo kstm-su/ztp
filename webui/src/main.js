@@ -5,7 +5,7 @@ import App from './App';
 import router from './router';
 
 Vue.use(VueAxios, {
-  baseURL: 'http://localhost:5001/',
+  baseURL: process.env.API_URL,
 });
 Vue.config.productionTip = false;
 
