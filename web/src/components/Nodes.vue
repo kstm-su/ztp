@@ -18,12 +18,11 @@
             </router-link>
           </td>
           <td>
-            <span v-if="node.name == null" class="null">null</span>
-            <span v-else>{{ node.name }}</span>
+            <router-link :to="`/nodes/${node.id}`">{{ node.name }}</router-link>
           </td>
           <td>
             <span v-if="node.image == null" class="null">null</span>
-            <router-link v-else :to="`/images/${node.image.id}`">{{ node.image.id }}</router-link>
+            <router-link v-else :to="`/images/${node.image.id}`">{{ node.image.id }}: {{ node.image.name }}</router-link>
           </td>
           <td>{{ node.mac_address }}</td>
           <td>
