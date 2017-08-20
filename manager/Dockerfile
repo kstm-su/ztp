@@ -1,7 +1,7 @@
 FROM node:8.4-alpine
 
 ADD . .
-RUN yarn install
+RUN npm install
 
 ENV PORT=8080
 EXPOSE 8080

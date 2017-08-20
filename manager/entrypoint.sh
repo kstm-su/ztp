@@ -1,4 +1,4 @@
 #!/bin/sh
-yarn add $NODE_MODULE
+npm install $NODE_MODULE
 (cd webpack && npm run build)
 node index.js
