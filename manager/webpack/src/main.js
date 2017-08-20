@@ -5,7 +5,7 @@ import App from './App';
 import router from './router';
 
 Vue.use(VueAxios, {
-  baseURL: process.env.API_URL,
+  baseURL: '/api',
 });
 Vue.config.productionTip = false;
 
