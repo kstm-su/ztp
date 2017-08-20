@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  req.nodes.findAll().then(nodes => res.json(nodes));
+  req.nodes.findAll({
+    include: [req.images],
+  }).then(nodes => res.json(nodes));
 });
 
 router.post('/', (req, res, next) => {
