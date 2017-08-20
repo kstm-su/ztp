@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('sqlite://db.sqlite3');
+const sequelize = new Sequelize(process.env.DATABASE_URL || 'sqlite://db.sqlite3');
 
 const Images = sequelize.define('images', {
   path: {

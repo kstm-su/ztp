@@ -9,4 +9,4 @@ app.use(cors());
 app.use(require('./db'));
 app.use(require('./controllers'));
 
-app.listen(5001);
+app.listen(process.env.PORT);
