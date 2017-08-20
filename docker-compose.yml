@@ -7,7 +7,7 @@ services:
       DATABASE_URL: postgres://ztp:ztp@db:5432/ztp?sslmode=disable
       NODE_MODULE: pg
     ports:
-      - 8080
+      - 8080:8080
   db:
     image: postgres:9.6-alpine
     environment:
@@ -18,7 +18,7 @@ services:
     build: dhcpd
     network_mode: host
     environment:
-      API_URL: http://manager:8080/api
+      API_URL: http://localhost:8080/api
       DHCP_SERVER_IP_ADDR: 172.17.4.50
       DHCP_START_IP_ADDR: 172.17.4.100
       DHCP_LEASE_RANGE: 150
