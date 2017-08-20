@@ -53,6 +53,8 @@ func main() {
 				}
 				fmt.Printf("reply: %+v\n", reply)
 				cache[macAddr] = reply
+				node.IPAddress = lease.IPAddr.String()
+				go gorequest.New().Put(fmt.Sprintf("%s/nodes/%d", apiURL, node.ID)).Send(node).End()
 				return reply
 			}
 		}
