@@ -49,12 +49,19 @@ func GetFilenameWithoutExtension(path string) string{
 
 func BuildImage(yamlPath string) (string, error){
 	fmt.Println("Building Image")
-	cmd := exec.Command("moby", "build", "-output", "iso-bios", yamlPath)
+	name := GetFilenameWithoutExtension(yamlPath)
+	cmd := exec.Command("moby", "build", "-output", "iso-bios", "-name", name, yamlPath)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	if err := cmd.Start(); err != nil {
+		log.Fatal(err)
 		return "", err
 	}
-
-	file := GetFilenameWithoutExtension(yamlPath) + ".iso"
+	fmt.Println("Building...")
+	if err := cmd.Wait(); err != nil {
+		log.Fatal(err)
+	}
+	file := name + ".iso"
 	fmt.Println("path: " + file)
 	return file, nil
 }
