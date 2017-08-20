@@ -12,16 +12,19 @@ func main() {
 	apiURL := os.Getenv("API_URL")
 	s, err := server.New(func(lease *server.Lease) server.Reply {
 		fmt.Printf("lease: %+v\n", lease)
-		_, body, err := gorequest.New().Get(apiURL + "/nodes").End()
+		nodes := []map[string]string{}
+		_, _, err := gorequest.New().Get(apiURL + "/nodes").EndStruct(&nodes)
 		if err != nil {
 			fmt.Println(err)
 			return &server.NAKReply{}
 		}
-		fmt.Printf("nodes: %+v\n", body)
-		/*
-			for _, node := range body {
+		macAddr := lease.CHAddr.String()
+		for _, node := range nodes {
+			if node["mac_address"] == macAddr {
+				fmt.Printf("node: %+v\n", node)
+				return nil
 			}
-		*/
+		}
 		return nil
 	})
 	if err == nil {
