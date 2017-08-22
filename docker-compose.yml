@@ -33,3 +33,9 @@ services:
         DomainName: domain.tld
     ports:
       - 67:67/udp
+  moby:
+    build: moby
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /usr/bin/docker:/usr/bin/docker:ro
+      - /tmp:/tmp
