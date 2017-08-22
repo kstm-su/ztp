@@ -7,5 +7,4 @@ RUN go get -v ./... && go build --ldflags '-s -w -linkmode external -extldflags 
 FROM alpine:3.6
 RUN apk add --update --no-cache ca-certificates
 COPY --from=0 /moby /moby
-#CMD ["/moby"]
-CMD ["tail", "-f", "/dev/null"]
+CMD ["/moby"]
