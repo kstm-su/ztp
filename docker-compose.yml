@@ -39,3 +39,5 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /usr/bin/docker:/usr/bin/docker:ro
       - /tmp:/tmp
+    ports:
+        - 3000:3000
