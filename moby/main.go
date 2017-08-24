@@ -23,7 +23,7 @@ func main() {
 
 		// Create Filename Hash
 		h := md5.New()
-        h.Write([]byte(config))
+		h.Write([]byte(config))
 		filename := outputDir + hex.EncodeToString(h.Sum(nil))
 
 		m, err := moby.NewConfig(config)
