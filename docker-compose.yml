@@ -33,11 +33,20 @@ services:
         DomainName: domain.tld
     ports:
       - 67:67/udp
+  tftp:
+    image: jumanjiman/tftp-hpa
+    ports:
+      - 69:69/udp
+    volumes:
+      - /tmp/tftpboot:/tftpboot
+    entrypoint: /bin/sh
+    tty: true
   moby:
     build: moby
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /usr/bin/docker:/usr/bin/docker:ro
       - /tmp:/tmp
+      - /tmp/tftpboot:/tftpboot
     ports:
         - 3000:3000
