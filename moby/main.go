@@ -16,7 +16,7 @@ const outputDir = "/tftpboot/"
 func main() {
 	router := gin.Default()
 
-	moby.MobyDir = "/tmp/moby"
+	moby.MobyDir = os.Getenv("MOBY_DIR")
 	router.POST("/create", func(c *gin.Context) {
 
 		log.Printf("%v", c.PostForm("config"))

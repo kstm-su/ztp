@@ -50,3 +50,5 @@ services:
       - /tmp/tftpboot:/tftpboot
     ports:
         - 3000:3000
+    environment:
+      MOBY_DIR: /tmp/moby
