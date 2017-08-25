@@ -28,14 +28,9 @@ type image struct {
 
 func main() {
 	apiURL := os.Getenv("API_URL")
-	cache := map[string]server.Reply{}
 	s, err := server.New(func(lease *server.Lease) server.Reply {
 		fmt.Printf("lease: %+v\n", lease)
 		macAddr := lease.CHAddr.String()
-		if reply, ok := cache[macAddr]; ok {
-			return reply
-		}
-		cache[macAddr] = nil
 		nodes := []node{}
 		_, _, err := gorequest.New().Get(apiURL + "/nodes").EndStruct(&nodes)
 		if err != nil {
@@ -52,7 +47,6 @@ func main() {
 					},
 				}
 				fmt.Printf("reply: %+v\n", reply)
-				cache[macAddr] = reply
 				node.IPAddress = lease.IPAddr.String()
 				go gorequest.New().Put(fmt.Sprintf("%s/nodes/%d", apiURL, node.ID)).Send(node).End()
 				return reply
