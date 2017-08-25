@@ -14,6 +14,7 @@ import (
 func main() {
 	router := gin.Default()
 
+	port := os.Getenv("PORT")
 	outputDir := os.Getenv("OUTPUT_DIR")
 	moby.MobyDir = os.Getenv("MOBY_DIR")
 	router.POST("/create", func(c *gin.Context) {
@@ -43,5 +44,5 @@ func main() {
 			"path": filename + ".iso",
 		})
 	})
-	router.Run(":3000")
+	router.Run(":" + port)
 }
