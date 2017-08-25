@@ -11,11 +11,10 @@ import (
 	"github.com/moby/tool/src/moby"
 )
 
-const outputDir = "/tftpboot/"
-
 func main() {
 	router := gin.Default()
 
+	outputDir := os.Getenv("OUTPUT_DIR")
 	moby.MobyDir = os.Getenv("MOBY_DIR")
 	router.POST("/create", func(c *gin.Context) {
 
