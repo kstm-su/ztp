@@ -11,6 +11,10 @@ import (
 	"github.com/moby/tool/src/moby"
 )
 
+type Create struct {
+	Config	string `form:"config"`
+}
+
 func main() {
 	router := gin.Default()
 
@@ -18,9 +22,18 @@ func main() {
 	outputDir := os.Getenv("OUTPUT_DIR")
 	moby.MobyDir = os.Getenv("MOBY_DIR")
 	router.POST("/create", func(c *gin.Context) {
+		var form Create
+
+		err := c.Bind(&form)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"error": "Bad Request",
+			})
+			log.Fatal(err)
+		}
 
 		log.Printf("%v", c.PostForm("config"))
-		config := []byte(c.PostForm("config"))
+		config := []byte(form.Config)
 
 		// Create Filename Hash
 		h := md5.New()
@@ -39,7 +52,6 @@ func main() {
 		if err := moby.Outputs(filename, image, []string{"iso-bios", "iso-efi"}, 1024, false); err != nil {
 			log.Fatalf("Error writing outputs: %v", err)
 		}
-
 		c.JSON(200, gin.H{
 			"path": filename + ".iso",
 		})
