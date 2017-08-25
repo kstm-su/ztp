@@ -1,14 +1,16 @@
 const express = require('express');
+const models = require('../models');
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  req.nodes.findAll({
-    include: [req.images],
+  models.Nodes.findAll({
+    include: [models.Images],
   }).then(nodes => res.json(nodes));
 });
 
 router.post('/', (req, res, next) => {
-  req.nodes.create(req.body).then(node => {
+  models.Nodes.create(req.body).then(node => {
     res.json(node.get({
       plain: true,
     }));
@@ -16,8 +18,8 @@ router.post('/', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
-  req.nodes.findById(req.params.id, {
-    include: [req.images],
+  models.Nodes.findById(req.params.id, {
+    include: [models.Images],
   }).then(node => {
     if (node == null) {
       return next();
@@ -27,7 +29,7 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.put('/:id', (req, res, next) => {
-  req.nodes.findById(req.params.id).then(node => {
+  models.Nodes.findById(req.params.id).then(node => {
     if (node == null) {
       return next();
     }

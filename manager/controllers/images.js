@@ -1,12 +1,14 @@
 const express = require('express');
+const models = require('../models');
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  req.images.findAll().then(images => res.json(images));
+  models.Image.findAll().then(images => res.json(images));
 });
 
 router.post('/', (req, res, next) => {
-  req.images.create(req.body).then(image => {
+  models.Images.create(req.body).then(image => {
     res.json(image.get({
       plain: true,
     }));
@@ -14,8 +16,8 @@ router.post('/', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
-  req.images.findById(req.params.id, { 
-    include: [req.nodes]
+  models.Images.findById(req.params.id, { 
+    include: [models.Nodes]
   }).then(image => {
     if (image == null) {
       return next();
@@ -25,7 +27,7 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.put('/:id', (req, res) => {
-  req.images.findById(req.params.id).then(image => {
+  models.Images.findById(req.params.id).then(image => {
     if (image == null) {
       return next();
     }

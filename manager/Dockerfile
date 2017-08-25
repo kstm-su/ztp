@@ -1,7 +1,8 @@
 FROM node:8.4-alpine
 
 ADD . .
-RUN npm install && (cd webpack && npm install) && rm -rf webpack
+RUN yarn install && \
+	(cd webpack && yarn install && npm run build) && rm -rf webpack
 
 ENV PORT=8080
 EXPOSE 8080
