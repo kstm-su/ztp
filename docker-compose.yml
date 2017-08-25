@@ -10,7 +10,7 @@ services:
     ports:
       - 8080
     volumes:
-      - run:/run:ro
+      - run:/run
   db:
     image: postgres:9.6-alpine
     environment:
