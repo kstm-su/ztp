@@ -15,6 +15,22 @@ type Create struct {
 	Config	string `form:"config"`
 }
 
+func createImage(config []byte, filename string) error {
+	m, err := moby.NewConfig(config)
+	if err != nil {
+		log.Fatalf("Invalid config: %v", err)
+	}
+	buf := new(bytes.Buffer)
+	if err := moby.Build(m, buf, false, ""); err != nil {
+		log.Fatalf("%v", err)
+	}
+	image := buf.Bytes()
+	if err := moby.Outputs(filename, image, []string{"iso-bios", "iso-efi"}, 1024, false); err != nil {
+		log.Fatalf("Error writing outputs: %v", err)
+	}
+	return nil
+}
+
 func main() {
 	router := gin.Default()
 
@@ -40,21 +56,18 @@ func main() {
 		h.Write([]byte(config))
 		filename := outputDir + hex.EncodeToString(h.Sum(nil))
 
-		m, err := moby.NewConfig(config)
-		if err != nil {
-			log.Fatalf("Invalid config: %v", err)
+
+		if err := createImage(config, filename); err != nil {
+			c.JSON(500, gin.H{
+				"error": "Failed to createImage()",
+			})
+		} else {
+			c.JSON(200, gin.H{
+				"path": filename + ".iso",
+			})
+
 		}
-		buf := new(bytes.Buffer)
-		if err := moby.Build(m, buf, false, ""); err != nil {
-			log.Fatalf("%v", err)
-		}
-		image := buf.Bytes()
-		if err := moby.Outputs(filename, image, []string{"iso-bios", "iso-efi"}, 1024, false); err != nil {
-			log.Fatalf("Error writing outputs: %v", err)
-		}
-		c.JSON(200, gin.H{
-			"path": filename + ".iso",
-		})
+
 	})
 	router.Run(":" + port)
 }
