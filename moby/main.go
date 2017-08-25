@@ -12,7 +12,7 @@ import (
 )
 
 type Create struct {
-	Config	string `form:"config"`
+	Config string `form:"config"`
 }
 
 func createImage(config []byte, filename string) error {
@@ -55,7 +55,6 @@ func main() {
 		h := md5.New()
 		h.Write([]byte(config))
 		filename := outputDir + hex.EncodeToString(h.Sum(nil))
-
 
 		if err := createImage(config, filename); err != nil {
 			c.JSON(500, gin.H{
