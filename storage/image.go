@@ -22,11 +22,13 @@ var (
 )
 
 type Image struct {
-	ID     int     `json:"id"`
-	Config string  `json:"config"`
-	Size   int     `json:"size"`
-	Path   *string `json:"path"`
-	Error  *string `json:"error"`
+	ID          int     `json:"id"`
+	Path        *string `json:"path"`
+	Config      string  `json:"config"`
+	Size        int     `json:"size"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Error       *string `json:"error"`
 }
 
 func init() {
@@ -43,6 +45,8 @@ func (i *Image) MD5() string {
 }
 
 func (i *Image) Append() {
+	i.Path = nil
+	i.Error = nil
 	buildQueue = append(buildQueue, i)
 	if !building {
 		go buildNext()
