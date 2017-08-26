@@ -7,10 +7,11 @@ services:
       SOCKET: /run/manager.sock
       DATABASE_URL: postgres://ztp:ztp@db:5432/ztp?sslmode=disable
       NODE_MODULE: pg
+      STORAGE_URL: http://storage:3000
     ports:
       - 8080
     volumes:
-      - run:/run
+      - ./tmp/run:/run
   db:
     image: postgres:9.6-alpine
     environment:
@@ -38,25 +39,22 @@ services:
     ports:
       - 67:67/udp
     volumes:
-      - run:/run:ro
+      - ./tmp/run:/run:ro
   storage:
     build: storage
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /usr/bin/docker:/usr/bin/docker:ro
-      - ./moby:/tmp/moby
+      - ./tmp/moby:/tmp/moby
       - ./images:/images
     ports:
         - 3000
     environment:
       PORT: 3000
+      API_URL: http://manager:8080/api
       OUTPUT_DIR: /images
       TEMPORARY_DIR: /tmp/moby
   tftpd:
     build: tftpd
-    ports:
-      - 69:69/udp
+    network_mode: host
     volumes:
       - ./images:/images:ro
-volumes:
-  run:

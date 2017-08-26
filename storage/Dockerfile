@@ -4,7 +4,6 @@ ADD . $GOPATH/src/github.com/kstm-su/ool-specialist-2017/moby
 WORKDIR $GOPATH/src/github.com/kstm-su/ool-specialist-2017/moby
 RUN go get -v ./... && go build --ldflags '-s -w -linkmode external -extldflags -static' -o /storage
 
-FROM alpine:3.6
-RUN apk add --update --no-cache ca-certificates
+FROM docker:latest
 COPY --from=0 /storage /storage
 CMD ["/storage"]

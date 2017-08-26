@@ -15,8 +15,9 @@ router.use((err, req, res, next) => {
   if (err.status == null) {
     err.status = 500;
   }
+  console.error(err);
   res.status(err.status).json({
-    error: err,
+    error: err.toString(),
   });
 });
 
