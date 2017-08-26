@@ -22,10 +22,10 @@ services:
     network_mode: host
     environment:
       API_URL: unix://run/manager.sock/api
-      DHCP_SERVER_IP_ADDR: 172.17.4.50
+      DHCP_SERVER_IP_ADDR: 172.17.4.2
       DHCP_START_IP_ADDR: 172.17.4.100
       DHCP_LEASE_RANGE: 150
-      DHCP_INTERFACE: eth1
+      DHCP_INTERFACE: eth0
       DHCP_OPTIONS: |
         SubnetMask: 255.255.255.0
         Router:
