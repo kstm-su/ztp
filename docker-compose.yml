@@ -44,7 +44,6 @@ services:
     build: storage
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /usr/bin/docker:/usr/bin/docker:ro
       - ./tmp/moby:/tmp/moby
       - ./images:/images
     ports:
