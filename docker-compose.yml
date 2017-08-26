@@ -11,7 +11,7 @@ services:
     ports:
       - 8080
     volumes:
-      - run:/run
+      - ./tmp/run:/run
   db:
     image: postgres:9.6-alpine
     environment:
@@ -39,13 +39,13 @@ services:
     ports:
       - 67:67/udp
     volumes:
-      - run:/run:ro
+      - ./tmp/run:/run:ro
   storage:
     build: storage
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /usr/bin/docker:/usr/bin/docker:ro
-      - ./moby:/tmp/moby
+      - ./tmp/moby:/tmp/moby
       - ./images:/images
     ports:
         - 3000
@@ -60,5 +60,3 @@ services:
       - 69:69/udp
     volumes:
       - ./images:/images:ro
-volumes:
-  run:
