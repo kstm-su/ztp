@@ -35,7 +35,7 @@ router.put('/:id', (req, res, next) => {
       throw new Error('image is null');
     }
     return image.update(req.body);
-  }).then(image => req.body.build ? axios(url, image) : { data: image })
+  }).then(image => req.body.build ? axios.put(url, image) : { data: image })
     .then(resp => resp.data)
     .then(image => res.json(image))
     .catch(err => next(err));
