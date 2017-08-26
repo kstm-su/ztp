@@ -7,6 +7,7 @@ services:
       SOCKET: /run/manager.sock
       DATABASE_URL: postgres://ztp:ztp@db:5432/ztp?sslmode=disable
       NODE_MODULE: pg
+      STORAGE_URL: http://storage:3000
     ports:
       - 8080
     volumes:
@@ -50,6 +51,7 @@ services:
         - 3000
     environment:
       PORT: 3000
+      API_URL: http://manager:8080/api
       OUTPUT_DIR: /images
       TEMPORARY_DIR: /tmp/moby
   tftpd:
