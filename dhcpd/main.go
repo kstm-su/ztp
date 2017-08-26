@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net"
 	"os"
 	"strings"
 
@@ -28,16 +29,17 @@ type image struct {
 
 func main() {
 	apiURL := os.Getenv("API_URL")
-	cache := map[string]server.Reply{}
+	client := gorequest.New()
+	if socket := os.Getenv("API_SOCKET"); socket != "" {
+		client.Transport.Dial = func(_, _ string) (net.Conn, error) {
+			return net.Dial("unix", socket)
+		}
+	}
 	s, err := server.New(func(lease *server.Lease) server.Reply {
 		fmt.Printf("lease: %+v\n", lease)
 		macAddr := lease.CHAddr.String()
-		if reply, ok := cache[macAddr]; ok {
-			return reply
-		}
-		cache[macAddr] = nil
 		nodes := []node{}
-		_, _, err := gorequest.New().Get(apiURL + "/nodes").EndStruct(&nodes)
+		_, _, err := client.Get(apiURL + "/nodes").EndStruct(&nodes)
 		if err != nil {
 			fmt.Println(err)
 			return &server.NAKReply{}
@@ -52,9 +54,8 @@ func main() {
 					},
 				}
 				fmt.Printf("reply: %+v\n", reply)
-				cache[macAddr] = reply
 				node.IPAddress = lease.IPAddr.String()
-				go gorequest.New().Put(fmt.Sprintf("%s/nodes/%d", apiURL, node.ID)).Send(node).End()
+				go client.Put(fmt.Sprintf("%s/nodes/%d", apiURL, node.ID)).Send(node).End()
 				return reply
 			}
 		}

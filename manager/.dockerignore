@@ -1,0 +1,10 @@
+*
+!index.js
+!package.json
+!db.js
+!entrypoint.sh
+!models
+!controllers
+!webpack
+!public
+public/static

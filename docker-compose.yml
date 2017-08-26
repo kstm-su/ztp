@@ -4,10 +4,13 @@ services:
     build: manager
     environment:
       PORT: 8080
+      SOCKET: /run/manager.sock
       DATABASE_URL: postgres://ztp:ztp@db:5432/ztp?sslmode=disable
       NODE_MODULE: pg
     ports:
-      - 8080:8080
+      - 8080
+    volumes:
+      - run:/run
   db:
     image: postgres:9.6-alpine
     environment:
@@ -18,11 +21,12 @@ services:
     build: dhcpd
     network_mode: host
     environment:
-      API_URL: http://localhost:8080/api
-      DHCP_SERVER_IP_ADDR: 172.17.4.50
+      API_URL: http://manager:8080/api
+      API_SOCKET: /run/manager.sock
+      DHCP_SERVER_IP_ADDR: 172.17.4.2
       DHCP_START_IP_ADDR: 172.17.4.100
       DHCP_LEASE_RANGE: 150
-      DHCP_INTERFACE: eth1
+      DHCP_INTERFACE: eth0
       DHCP_OPTIONS: |
         SubnetMask: 255.255.255.0
         Router:
@@ -33,6 +37,8 @@ services:
         DomainName: domain.tld
     ports:
       - 67:67/udp
+    volumes:
+      - run:/run:ro
   tftp:
     image: jumanjiman/tftp-hpa
     ports:
@@ -54,3 +60,5 @@ services:
       PORT: 3000
       OUTPUT_DIR: /tftpboot/
       MOBY_DIR: /tmp/moby
+volumes:
+  run:
