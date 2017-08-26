@@ -4,7 +4,7 @@ const models = require('../models');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  models.Image.findAll().then(images => res.json(images));
+  models.Images.findAll().then(images => res.json(images));
 });
 
 router.post('/', (req, res, next) => {
