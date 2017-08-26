@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net"
 	"os"
 	"strings"
 
@@ -28,6 +29,12 @@ type image struct {
 
 func main() {
 	apiURL := os.Getenv("API_URL")
+	client := gorequest.New()
+	if socket := os.Getenv("API_SOCKET"); socket != "" {
+		client.Transport.Dial = func(_, _ string) (net.Conn, error) {
+			return net.Dial("unix", socket)
+		}
+	}
 	s, err := server.New(func(lease *server.Lease) server.Reply {
 		fmt.Printf("lease: %+v\n", lease)
 		macAddr := lease.CHAddr.String()
