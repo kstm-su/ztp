@@ -54,12 +54,9 @@ services:
       TEMPORARY_DIR: /tmp/moby
   tftpd:
     build: tftpd
-    environment:
-      TFTP_ROOT: /images:ro
     ports:
       - 69:69/udp
     volumes:
-      - ./images:/images
-    entrypoint: tail -f /dev/null
+      - ./images:/images:ro
 volumes:
   run:

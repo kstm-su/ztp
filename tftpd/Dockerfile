@@ -3,4 +3,4 @@ RUN apk add --no-cache tftp-hpa
 ENV TFTP_ROOT=/var/tftpboot
 EXPOSE 69/udp
 ENTRYPOINT ["in.tftpd"]
-CMD ["-L", "--secure", $TFTP_ROOT]
+CMD ["-L", "-v", "-s", "/"]
