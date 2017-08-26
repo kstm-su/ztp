@@ -55,7 +55,6 @@ services:
       TEMPORARY_DIR: /tmp/moby
   tftpd:
     build: tftpd
-    ports:
-      - 69:69/udp
+    network_mode: host
     volumes:
       - ./images:/images:ro
