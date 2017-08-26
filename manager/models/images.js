@@ -11,6 +11,9 @@ const Images = db.define('images', {
     type: Sequelize.TEXT,
     allowNull: false,
   },
+  size: {
+    type: Sequelize.INTEGER,
+  },
   name: {
     type: Sequelize.STRING,
     allowNull: false,
