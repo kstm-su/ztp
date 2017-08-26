@@ -6,6 +6,8 @@
           <th>#</th>
           <th>name</th>
           <th>description</th>
+          <th>size</th>
+          <th>status</th>
         </tr>
       </thead>
       <tbody>
@@ -21,6 +23,12 @@
             </router-link>
           </td>
           <td>{{ image.description }}</td>
+          <td>{{ image.size }}MB</td>
+          <td>
+            <span v-if="image.error">error</span>
+            <span v-else-if="image.path">ready</span>
+            <span v-else>building</span>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -44,6 +52,12 @@
         </label>
       </div>
       <div>
+        <label>
+          size
+          <input type="number" v-model.number="newImage.size" />
+        </label>
+      </div>
+      <div>
         <button>add</button>
       </div>
     </form>
@@ -59,6 +73,7 @@ export default {
         name: '',
         config: '',
         description: '',
+        size: 1024,
       },
     };
   },
@@ -77,6 +92,7 @@ export default {
           name: '',
           config: '',
           description: '',
+          size: 1024,
         };
       });
     },
