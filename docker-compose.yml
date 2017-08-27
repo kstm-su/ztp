@@ -18,8 +18,8 @@ services:
       POSTGRES_DB: ztp
       POSTGRES_USER: ztp
       POSTGRES_PASSWORD: ztp
-  dhcpd:
-    build: dhcpd
+  dhcp:
+    build: dhcp
     network_mode: host
     environment:
       API_URL: http://manager:8080/api
@@ -53,8 +53,8 @@ services:
       API_URL: http://manager:8080/api
       OUTPUT_DIR: /images
       TEMPORARY_DIR: /tmp/moby
-  tftpd:
-    build: tftpd
+  tftp:
+    build: tftp
     network_mode: host
     volumes:
       - ./images:/images:ro
