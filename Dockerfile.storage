@@ -1,0 +1,9 @@
+FROM golang:1.8-alpine
+RUN apk add --update --no-cache git musl-dev gcc ca-certificates
+WORKDIR $GOPATH/src/github.com/kstm-su/ztp/storage
+ADD ./storage .
+RUN go get -v ./... && go build --ldflags '-s -w -linkmode external -extldflags -static' -o /storage
+
+FROM docker:latest
+COPY --from=0 /storage /storage
+CMD ["/storage"]
