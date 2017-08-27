@@ -1,7 +1,8 @@
 version: "3"
 services:
   manager:
-    build: manager
+    image: kstm/ztp:manager
+#   build: manager
     environment:
       PORT: 8080
       SOCKET: /run/manager.sock
@@ -19,7 +20,8 @@ services:
       POSTGRES_USER: ztp
       POSTGRES_PASSWORD: ztp
   dhcp:
-    build: dhcp
+    image: kstm/ztp:dhcp
+#   build: dhcp
     network_mode: host
     environment:
       API_URL: http://manager:8080/api
@@ -41,7 +43,8 @@ services:
     volumes:
       - ./tmp/run:/run:ro
   storage:
-    build: storage
+    image: kstm/ztp:storage
+#   build: storage
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./tmp/moby:/tmp/moby
@@ -54,7 +57,8 @@ services:
       OUTPUT_DIR: /images
       TEMPORARY_DIR: /tmp/moby
   tftp:
-    build: tftp
+    image: kstm/ztp:tftp
+#   build: tftp
     network_mode: host
     volumes:
       - ./images:/images:ro
