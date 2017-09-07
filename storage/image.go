@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	imageTypes = []string{"iso-bios", "iso-efi"}
+	imageTypes = []string{"iso-bios", "iso-efi", "kernel+initrd"}
 	outputDir  = ""
 	buildQueue = []*Image{}
 	building   bool
@@ -70,7 +70,7 @@ func (i *Image) Build() error {
 		i.Size = 1024
 	}
 	path := filepath.Join(outputDir, i.MD5())
-	if err := moby.Outputs(path, buf.Bytes(), imageTypes, i.Size, false); err != nil {
+	if err := moby.Formats(path, buf.Bytes(), imageTypes, i.Size, false); err != nil {
 		errStr := err.Error()
 		i.Error = &errStr
 		return err
