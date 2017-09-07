@@ -2,12 +2,11 @@ package main
 
 import (
 	"bytes"
-	"crypto/md5"
-	"encoding/hex"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/moby/tool/src/moby"
 	"github.com/parnurzeal/gorequest"
@@ -38,12 +37,6 @@ func init() {
 
 }
 
-func (i *Image) MD5() string {
-	h := md5.New()
-	h.Write([]byte(i.Config))
-	return hex.EncodeToString(h.Sum(nil))
-}
-
 func (i *Image) Append() {
 	i.Path = nil
 	i.Error = nil
@@ -69,7 +62,7 @@ func (i *Image) Build() error {
 	if i.Size == 0 {
 		i.Size = 1024
 	}
-	path := filepath.Join(outputDir, i.MD5())
+	path := filepath.Join(outputDir, strconv.Itoa(i.ID))
 	if err := moby.Formats(path, buf.Bytes(), imageTypes, i.Size, false); err != nil {
 		errStr := err.Error()
 		i.Error = &errStr
