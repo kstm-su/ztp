@@ -82,7 +82,7 @@ func (i *Image) Build() error {
 	}
 	i.Path = &path
 
-	config, err := ioutil.ReadFile("/usr/share/syslinux/pxelinux.cfg")
+	config, err := ioutil.ReadFile("/usr/share/syslinux/pxelinux.cfg/default")
 	if err != nil {
 		return err
 	}
