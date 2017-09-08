@@ -91,7 +91,7 @@ func (i *Image) Build() error {
 		return err
 	}
 	return ioutil.WriteFile(
-		path+"/syslinux/pxelinux.cfg",
+		path+"/syslinux/pxelinux.cfg/default",
 		[]byte(string(config)+string(cmdline)),
 		0644,
 	)
