@@ -50,7 +50,7 @@ func main() {
 				reply := &server.ACKReply{
 					Lease: lease,
 					Options: dhcp.Options{
-						dhcp.OptionBootFileName: []byte(node.Image.Path + ".iso"),
+						dhcp.OptionBootFileName: []byte(node.Image.Path + "/syslinux/pxelinux.0"),
 					},
 				}
 				fmt.Printf("reply: %+v\n", reply)
