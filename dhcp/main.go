@@ -51,6 +51,7 @@ func main() {
 					Lease: lease,
 					Options: dhcp.Options{
 						dhcp.OptionBootFileName: []byte(node.Image.Path + "/syslinux/pxelinux.0"),
+						dhcp.OptionHostName:     []byte(node.Name),
 					},
 				}
 				fmt.Printf("reply: %+v\n", reply)
