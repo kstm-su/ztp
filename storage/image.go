@@ -92,7 +92,7 @@ func (i *Image) Build() error {
 	}
 	return ioutil.WriteFile(
 		path+"/syslinux/pxelinux.cfg/default",
-		[]byte(string(config)+string(cmdline)),
+		[]byte(string(config)+"\tAPPEND "+string(cmdline)),
 		0644,
 	)
 }

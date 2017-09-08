@@ -5,4 +5,3 @@ ONTIMEOUT linuxkit
 LABEL linuxkit
 	LINUX ../linuxkit-kernel
 	INITRD ../linuxkit-initrd.img
-	APPEND 
