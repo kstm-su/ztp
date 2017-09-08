@@ -1,4 +1,3 @@
-DEFAULT menu.c32
 PROMPT 0
 TIMEOUT 10
 ONTIMEOUT linuxkit
@@ -6,3 +5,4 @@ ONTIMEOUT linuxkit
 LABEL linuxkit
 	LINUX ../linuxkit-kernel
 	INITRD ../linuxkit-initrd.img
+	APPEND 

@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -64,16 +65,13 @@ func (i *Image) Build() error {
 	}
 	path := filepath.Join(outputDir, strconv.Itoa(i.ID))
 
-	if err := os.MkdirAll(path+"/syslinux", os.ModeType|os.ModePerm); err != nil {
+	if err := os.MkdirAll(path+"/syslinux/pxelinux.cfg", 0755); err != nil {
 		return err
 	}
 	if err := os.Symlink("/usr/share/syslinux/pxelinux.0", path+"/syslinux/pxelinux.0"); err != nil {
 		return err
 	}
 	if err := os.Symlink("/usr/share/syslinux/ldlinux.c32", path+"/syslinux/ldlinux.c32"); err != nil {
-		return err
-	}
-	if err := os.Symlink("/usr/share/syslinux/pxelinux.cfg", path+"/syslinux/pxelinux.cfg"); err != nil {
 		return err
 	}
 
@@ -83,7 +81,20 @@ func (i *Image) Build() error {
 		return err
 	}
 	i.Path = &path
-	return nil
+
+	config, err := ioutil.ReadFile("/usr/share/syslinux/pxelinux.cfg")
+	if err != nil {
+		return err
+	}
+	cmdline, err := ioutil.ReadFile(path + "/linuxkit-cmdline")
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(
+		path+"/syslinux/pxelinux.cfg",
+		[]byte(string(config)+string(cmdline)),
+		0644,
+	)
 }
 
 func buildNext() {
