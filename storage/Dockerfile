@@ -5,4 +5,5 @@ ADD . .
 RUN go get -v ./... && go build --ldflags '-s -w -linkmode external -extldflags -static' -o /storage
 
 FROM docker:latest
+COPY --from=0 /storage /storage
 CMD ["/storage"]
