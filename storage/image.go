@@ -64,10 +64,16 @@ func (i *Image) Build() error {
 	}
 	path := filepath.Join(outputDir, strconv.Itoa(i.ID))
 
-	if err := os.Mkdir(path, os.ModeType|os.ModePerm); err != nil {
+	if err := os.MkdirAll(path+"/syslinux", os.ModeType|os.ModePerm); err != nil {
 		return err
 	}
-	if err := os.Symlink("/usr/share/syslinux", path+"/syslinux"); err != nil {
+	if err := os.Symlink("/usr/share/syslinux/pxelinux.0", path+"/syslinux/pxelinux.0"); err != nil {
+		return err
+	}
+	if err := os.Symlink("/usr/share/syslinux/ldlinux.c32", path+"/syslinux/ldlinux.c32"); err != nil {
+		return err
+	}
+	if err := os.Symlink("/usr/share/syslinux/pxelinux.cfg", path+"/syslinux/pxelinux.cfg"); err != nil {
 		return err
 	}
 
