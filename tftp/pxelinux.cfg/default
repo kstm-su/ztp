@@ -1,7 +1,7 @@
 DEFAULT menu.c32
 PROMPT 0
 TIMEOUT 10
-ontimeout linuxkit
+ONTIMEOUT linuxkit
 
 LABEL linuxkit
 	LINUX ../linuxkit-kernel
