@@ -26,18 +26,18 @@ services:
     environment:
       API_URL: http://manager:8080/api
       API_SOCKET: /run/manager.sock
-      DHCP_SERVER_IP_ADDR: 172.17.4.2
-      DHCP_START_IP_ADDR: 172.17.4.100
-      DHCP_LEASE_RANGE: 150
-      DHCP_INTERFACE: eth0
+      DHCP_SERVER_IP_ADDR: 192.168.100.1
+      DHCP_START_IP_ADDR: 192.168.100.2
+      DHCP_LEASE_RANGE: 50
+      DHCP_INTERFACE: ens192
       DHCP_OPTIONS: |
         SubnetMask: 255.255.255.0
         Router:
-          - 172.17.4.1
+          - 192.168.100.1
         DomainNameServer:
           - 8.8.8.8
           - 8.8.4.4
-        DomainName: domain.tld
+        DomainName: ztp.kstm.cloud
     ports:
       - 67:67/udp
     volumes:
@@ -49,6 +49,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./tmp/moby:/tmp/moby
       - ./images:/images
+      - syslinux:/usr/local/share/syslinux
     ports:
         - 3000
     environment:
@@ -62,3 +63,6 @@ services:
     network_mode: host
     volumes:
       - ./images:/images:ro
+      - syslinux:/usr/local/share/syslinux
+volumes:
+  syslinux:
