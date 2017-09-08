@@ -1,0 +1,8 @@
+default menu.c32
+prompt 0
+timeout 100
+ontimeout linuxkit
+
+label linuxkit
+	menu label LinuxKit
+	linux ../linuxkit-kernel

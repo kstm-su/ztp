@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	imageTypes = []string{"iso-bios", "iso-efi", "kernel+initrd"}
+	imageTypes = []string{"kernel+initrd"}
 	outputDir  = ""
 	buildQueue = []*Image{}
 	building   bool
@@ -63,7 +63,15 @@ func (i *Image) Build() error {
 		i.Size = 1024
 	}
 	path := filepath.Join(outputDir, strconv.Itoa(i.ID))
-	if err := moby.Formats(path, buf.Bytes(), imageTypes, i.Size, false); err != nil {
+
+	if err := os.Mkdir(path, os.ModeType|os.ModePerm); err != nil {
+		return err
+	}
+	if err := os.Symlink("/usr/share/syslinux", path+"/syslinux"); err != nil {
+		return err
+	}
+
+	if err := moby.Formats(path+"/linuxkit", buf.Bytes(), imageTypes, i.Size, false); err != nil {
 		errStr := err.Error()
 		i.Error = &errStr
 		return err
