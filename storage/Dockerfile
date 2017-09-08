@@ -6,4 +6,5 @@ RUN go get -v ./... && go build --ldflags '-s -w -linkmode external -extldflags 
 
 FROM docker:latest
 COPY --from=0 /storage /storage
+COPY ./pxelinux.cfg /usr/share/syslinux/pxelinux.cfg
 CMD ["/storage"]
