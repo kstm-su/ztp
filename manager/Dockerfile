@@ -2,7 +2,7 @@ FROM node:8.4-alpine
 
 ADD . .
 RUN yarn install && \
-	(cd webpack && yarn install && npm rebuild node-sass && npm run build) && rm -rf webpack
+	(cd webpack && yarn install && npm run build) && rm -rf webpack
 
 ENV PORT=8080
 EXPOSE 8080
