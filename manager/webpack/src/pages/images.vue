@@ -31,7 +31,7 @@
               error
             </span>
             <span v-else-if="image.path">
-              <md-icon class="color-green">check circle</md-icon>
+              <md-icon class="color-green">check_circle</md-icon>
               ready
             </span>
             <span v-else>
