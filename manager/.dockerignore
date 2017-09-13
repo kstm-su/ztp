@@ -6,5 +6,4 @@
 !models
 !controllers
 !webpack
-!public
-public/static
+webpack/node_modules
