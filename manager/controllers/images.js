@@ -31,14 +31,14 @@ router.get('/:id', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
   let isBuild = req.body.build;
+  if (isBuild) {
+    delete req.body.build;
+    req.body.path = null;
+    req.body.error = null;
+  }
   models.Images.findById(req.params.id).then(image => {
     if (image == null) {
       throw new Error('image is null');
-    }
-    if (isBuild) {
-      delete req.body.build;
-      image.path = null;
-      image.error = null;
     }
     return image.update(req.body);
   }).then(image => isBuild ? axios.post(url, image) : { data: image })
