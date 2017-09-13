@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res, next) => {
-  models.Images.upsert(req.body)
+  models.Images.create(req.body)
     .then(image => image.get({ plain: true }))
     .then(image => axios.post(url, image))
     .then(resp => resp.data)
