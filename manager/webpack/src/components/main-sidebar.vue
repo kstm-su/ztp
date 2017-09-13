@@ -2,13 +2,10 @@
   <md-sidenav class="md-left md-fixed main-sidebar" md-swipeable ref="sidenav">
     <md-list class="md-dense links">
       <md-list-item>
-        <router-link exact to="/">root</router-link>
+        <router-link exact to="/images">Images</router-link>
       </md-list-item>
       <md-list-item>
-        <router-link exact to="/foo">foo</router-link>
-      </md-list-item>
-      <md-list-item>
-        <router-link exact to="/bar">bar</router-link>
+        <router-link exact to="/nodes">Nodes</router-link>
       </md-list-item>
     </md-list>
   </md-sidenav>

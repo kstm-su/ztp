@@ -1,18 +1,17 @@
-import Root from './pages/root';
-import Foo from './pages/foo';
-import Bar from './pages/bar';
+import Images from './pages/images';
+import Nodes from './pages/nodes';
 
 export default [
   {
     path: '/',
-    component: Root,
+    component: Images,
   },
   {
-    path: '/foo',
-    component: Foo,
+    path: '/images',
+    component: Images,
   },
   {
-    path: '/bar',
-    component: Bar,
+    path: '/nodes',
+    component: Nodes,
   },
 ];
