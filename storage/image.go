@@ -65,7 +65,7 @@ func (i *Image) Build() error {
 	}
 	path := filepath.Join(outputDir, strconv.Itoa(i.ID))
 
-	if err := os.RemoveAll(path); !os.IsNotExist(err) {
+	if err := os.RemoveAll(path); err != nil && !os.IsNotExist(err) {
 		return err
 	}
 
