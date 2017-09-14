@@ -46,7 +46,7 @@
 
     .md-backdrop {
       @media (min-width: 1281px) {
-        opacity: 0;
+        opacity: 0 !important;
         pointer-events: none;
       }
     }
