@@ -37,7 +37,7 @@
   }
 
   .page {
-    margin: 16px;
+    padding: 16px;
     overflow: auto;
   }
 
