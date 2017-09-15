@@ -12,7 +12,7 @@
         </md-table-row>
       </md-table-header>
       <transition-group name="list" tag="md-table-body">
-        <md-table-row v-for="image in sortedImages" :key="image.id">
+        <md-table-row v-for="image in sortedImages" :key="image.id" class="list-item">
           <md-table-cell>
             <router-link :to="`/images/${image.id}`">
               {{ image.id }}
@@ -151,8 +151,13 @@
     color: green;
   }
 
-  .list-move {
-    transition: transform ease .5s;
+  .list-item {
+    transition: all ease .5s;
+  }
+
+  .list-enter,
+  .list-leave-active {
+    opacity: 0;
   }
 
   .status-enter-active,
