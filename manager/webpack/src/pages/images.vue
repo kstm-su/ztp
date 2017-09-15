@@ -11,8 +11,8 @@
           <md-table-head>path</md-table-head>
         </md-table-row>
       </md-table-header>
-      <md-table-body>
-        <md-table-row v-for="image in images" :key="image.id">
+      <transition-group name="list" tag="md-table-body">
+        <md-table-row v-for="image in sortedImages" :key="image.id">
           <md-table-cell>
             <router-link :to="`/images/${image.id}`">
               {{ image.id }}
@@ -26,18 +26,20 @@
           <md-table-cell>{{ image.description }}</md-table-cell>
           <md-table-cell>{{ image.size }}MB</md-table-cell>
           <md-table-cell>
-            <span v-if="image.error">
-              <md-icon class="color-red">error</md-icon>
-              error
-            </span>
-            <span v-else-if="image.path">
-              <md-icon class="color-green">check_circle</md-icon>
-              ready
-            </span>
-            <span v-else>
-              <md-spinner md-indeterminate :md-size="20"></md-spinner>
-              building
-            </span>
+            <transition name="status" mode="out-in">
+              <span v-if="image.error" key="error">
+                <md-icon class="color-red">error</md-icon>
+                error
+              </span>
+              <span v-else-if="image.path" key="ready">
+                <md-icon class="color-green">check_circle</md-icon>
+                ready
+              </span>
+              <span v-else key="building">
+                <md-spinner md-indeterminate :md-size="20"></md-spinner>
+                building
+              </span>
+            </transition>
           </md-table-cell>
           <md-table-cell>
             <span v-if="image.path">
@@ -48,7 +50,7 @@
             </span>
           </md-table-cell>
         </md-table-row>
-      </md-table-body>
+      </transition-group>
     </md-table>
     <form @submit.prevent="submit">
       <md-input-container>
@@ -85,6 +87,21 @@
         },
       };
     },
+    computed: {
+      sortedImages() {
+        return this.images.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+      },
+    },
+    sockets:{
+      image(image){
+        this.images = this.images.map(i => {
+          if (i.id === image.id) {
+            return image;
+          }
+          return i;
+        });
+      },
+    },
     methods: {
       fetch() {
         return this.$http.get('/images').then(resp => {
@@ -107,7 +124,7 @@
       rebuild(id) {
         return this.$http.put(`/images/${id}`, {
           build: true,
-        }).then(resp => this.images = this.images.map(image => {
+        }).then(resp => this.images.map(image => {
           if (image.id === id) {
             return resp.data;
           }
@@ -132,5 +149,19 @@
 
   .color-green {
     color: green;
+  }
+
+  .list-move {
+    transition: transform ease .5s;
+  }
+
+  .status-enter-active,
+  .status-leave-active {
+    transition: opacity ease .25s;
+  }
+
+  .status-enter,
+  .status-leave-to {
+    opacity: 0;
   }
 </style>
