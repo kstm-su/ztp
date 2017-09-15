@@ -43,7 +43,10 @@ router.put('/:id', (req, res, next) => {
     return image.update(req.body);
   }).then(image => isBuild ? axios.post(url, image) : { data: image })
     .then(resp => resp.data)
-    .then(image => res.json(image))
+    .then(image => {
+      req.io.emit('image', image);
+      res.json(image);
+    })
     .catch(err => next(err));
 });
 

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import VueMaterial from 'vue-material';
 import App from './app';
 import routes from './routes';
+import VueSocketio from 'vue-socket.io';
 import VueHttp from './http';
 
 import 'roboto-fontface/css/roboto/roboto-fontface.css';
@@ -15,6 +16,7 @@ Vue.use(VueMaterial);
 Vue.use(VueHttp, {
   baseURL: '/api',
 });
+Vue.use(VueSocketio, '/');
 
 new Vue({
   el: '#app',
