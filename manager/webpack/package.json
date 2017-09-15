@@ -32,6 +32,7 @@
     "npm": ">= 3.0.0"
   },
   "dependencies": {
-    "axios": "^0.16.2"
+    "axios": "^0.16.2",
+    "vue-socket.io": "^2.1.1-a"
   }
 }
