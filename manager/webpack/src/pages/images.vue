@@ -12,17 +12,9 @@
         </md-table-row>
       </md-table-header>
       <transition-group name="list" tag="md-table-body">
-        <md-table-row v-for="image in sortedImages" :key="image.id" class="list-item">
-          <md-table-cell>
-            <router-link :to="`/images/${image.id}`">
-              {{ image.id }}
-            </router-link>
-          </md-table-cell>
-          <md-table-cell>
-            <router-link :to="`/images/${image.id}`">
-              {{ image.name }}
-            </router-link>
-          </md-table-cell>
+        <md-table-row v-for="image in sortedImages" :key="image.id" :id="`image-${image.id}`" class="list-item" @click.native="edit(image)">
+          <md-table-cell>{{ image.id }}</md-table-cell>
+          <md-table-cell>{{ image.name }}</md-table-cell>
           <md-table-cell>{{ image.description }}</md-table-cell>
           <md-table-cell>{{ image.size }}MB</md-table-cell>
           <md-table-cell>
@@ -46,31 +38,45 @@
               {{ image.path }}
             </span>
             <span v-else>
-              <a href="#" @click.prevent="rebuild(image.id)">rebuild</a>
+              <a href="#" @click.prevent.stop="rebuild(image.id)">rebuild</a>
             </span>
           </md-table-cell>
         </md-table-row>
       </transition-group>
     </md-table>
-    <form @submit.prevent="submit">
-      <md-input-container>
-        <label>image name</label>
-        <md-input v-model="newImage.name"></md-input>
-      </md-input-container>
-      <md-input-container>
-        <label>LinuxKit config</label>
-        <md-textarea v-model="newImage.config"></md-textarea>
-      </md-input-container>
-      <md-input-container>
-        <label>image description</label>
-        <md-textarea v-model="newImage.description"></md-textarea>
-      </md-input-container>
-      <md-input-container>
-        <label>image size</label>
-        <md-input type="number" v-model.number="newImage.size"></md-input>
-      </md-input-container>
-      <md-button class="md-raised md-primary" @click="submit">add</md-button>
-    </form>
+    <md-dialog :open-from="editingSelector" :close-to="editingSelector" ref="editDialog">
+      <md-dialog-title>
+        <span v-if="editing.id == null">new image</span>
+        <span v-else>edit image #{{ editing.id }}</span>
+      </md-dialog-title>
+      <md-dialog-content>
+        <form>
+          <md-input-container>
+            <label>image name</label>
+            <md-input v-model="editing.name"></md-input>
+          </md-input-container>
+          <md-input-container>
+            <label>LinuxKit config</label>
+            <md-textarea v-model="editing.config"></md-textarea>
+          </md-input-container>
+          <md-input-container>
+            <label>image description</label>
+            <md-textarea v-model="editing.description"></md-textarea>
+          </md-input-container>
+          <md-input-container>
+            <label>image size</label>
+            <md-input type="number" v-model.number="editing.size"></md-input>
+          </md-input-container>
+        </form>
+      </md-dialog-content>
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="closeEditDialog">Cancel</md-button>
+        <md-button class="md-primary" @click="submit">OK</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+    <md-button class="md-fab md-fab-bottom-right" @click="edit(newImage)">
+      <md-icon>add</md-icon>
+    </md-button>
   </div>
 </template>
 
@@ -85,13 +91,20 @@
           description: '',
           size: 1024,
         },
+        editing: {},
       };
     },
     computed: {
       sortedImages() {
         return this.images.sort((a, b) => {
-          new Date(b.updated_at) - new Date(a.updated_at);
+          return new Date(b.updated_at) - new Date(a.updated_at);
         });
+      },
+      editingSelector() {
+        if (this.editing.id == null) {
+          return null;
+        }
+        return `#image-${this.editing.id}`;
       },
     },
     sockets: {
@@ -102,6 +115,11 @@
           }
           return i;
         });
+        console.log(this.sortedImages.map(i => ({
+          id: i.id,
+          updated_at: i.updated_at,
+          date: new Date(i.updated_at) - 0,
+        })));
       },
     },
     methods: {
@@ -111,14 +129,21 @@
         });
       },
       submit() {
-        return this.$http.post('/images', this.newImage).then(resp => {
-          this.images.unshift(resp.data);
-          this.newImage = {
-            name: '',
-            config: '',
-            description: '',
-            size: 1024,
-          };
+        this.editing.build = true;
+        if (this.editing.id == null) {
+          return this.$http.post('/images', this.editing).then(resp => {
+            this.images.unshift(resp.data);
+            this.newImage = {
+              name: '',
+              config: '',
+              description: '',
+              size: this.editing.size,
+            };
+            this.closeEditDialog();
+          });
+        }
+        return this.$http.put(`/images/${this.editing.id}`, this.editing).then(resp => {
+          this.closeEditDialog();
         });
       },
       rebuild(id) {
@@ -131,6 +156,14 @@
           return image;
         }));
       },
+      edit(image) {
+        this.editing = image;
+        this.$refs.editDialog.open();
+      },
+      closeEditDialog() {
+        this.$refs.editDialog.close();
+        this.editing = {};
+      },
     },
     mounted() {
       this.fetch();
@@ -139,12 +172,16 @@
 </script>
 
 <style scoped>
+  >>> .md-dialog {
+    min-width: 80%;
+  }
+
   .list-item {
     transition: all ease .5s;
   }
 
   .list-enter,
-  .list-leave-active {
+  .list-leave-to {
     opacity: 0;
   }
 
