@@ -139,10 +139,6 @@
 </script>
 
 <style scoped>
-  .null {
-    opacity: .5;
-  }
-
   .color-red {
     color: red;
   }
