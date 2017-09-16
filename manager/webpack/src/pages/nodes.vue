@@ -10,7 +10,7 @@
           <md-table-head>IP address</md-table-head>
         </md-table-row>
       </md-table-header>
-      <md-table-body>
+      <transition-group name="list" tag="md-table-body">
         <md-table-row v-for="node in nodes">
           <md-table-head>
             <router-link :to="`/nodes/${node.id}`">
@@ -30,7 +30,7 @@
             <span v-else>{{ node.ip_address }}</span>
           </md-table-cell>
         </md-table-row>
-      </md-table-body>
+      </transition-group>
     </md-table>
     <form @submit.prevent="submit">
       <div>
@@ -107,7 +107,12 @@ export default {
 </script>
 
 <style scoped>
-.null {
-  opacity: .5;
-}
+  .list-item {
+    transition: all ease .5s;
+  }
+
+  .list-enter,
+  .list-leave-active {
+    opacity: 0;
+  }
 </style>
