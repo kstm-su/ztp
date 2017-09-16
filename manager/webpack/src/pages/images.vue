@@ -89,7 +89,9 @@
     },
     computed: {
       sortedImages() {
-        return this.images.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+        return this.images.sort((a, b) => {
+          new Date(b.updated_at) - new Date(a.updated_at);
+        });
       },
     },
     sockets:{
@@ -105,9 +107,7 @@
     methods: {
       fetch() {
         return this.$http.get('/images').then(resp => {
-          this.images = resp.data.sort((a, b) => {
-            return new Date(b.updated_at) - new Date(a.updated_at);
-          });
+          this.images = resp.data;
         });
       },
       submit() {
@@ -139,14 +139,6 @@
 </script>
 
 <style scoped>
-  .color-red {
-    color: red;
-  }
-
-  .color-green {
-    color: green;
-  }
-
   .list-item {
     transition: all ease .5s;
   }
