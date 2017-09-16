@@ -37,7 +37,6 @@
   }
 
   .page {
-    padding: 16px;
     overflow: auto;
   }
 
