@@ -1,37 +1,37 @@
 <template>
   <div>
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>name</th>
-          <th>image</th>
-          <th>MAC address</th>
-          <th>IP address</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="node in nodes">
-          <td>
+    <md-table>
+      <md-table-header>
+        <md-table-row>
+          <md-table-head>#</md-table-head>
+          <md-table-head>name</md-table-head>
+          <md-table-head>image</md-table-head>
+          <md-table-head>MAC address</md-table-head>
+          <md-table-head>IP address</md-table-head>
+        </md-table-row>
+      </md-table-header>
+      <md-table-body>
+        <md-table-row v-for="node in nodes">
+          <md-table-head>
             <router-link :to="`/nodes/${node.id}`">
               {{ node.id }}
             </router-link>
-          </td>
-          <td>
+          </md-table-head>
+          <md-table-cell>
             <router-link :to="`/nodes/${node.id}`">{{ node.name }}</router-link>
-          </td>
-          <td>
+          </md-table-cell>
+          <md-table-cell>
             <span v-if="node.image == null" class="null">null</span>
             <router-link v-else :to="`/images/${node.image.id}`">{{ node.image.id }}: {{ node.image.name }}</router-link>
-          </td>
-          <td>{{ node.mac_address }}</td>
-          <td>
+          </md-table-cell>
+          <md-table-cell>{{ node.mac_address }}</md-table-cell>
+          <md-table-cell>
             <span v-if="node.ip_address == null" class="null">null</span>
             <span v-else>{{ node.ip_address }}</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </md-table-cell>
+        </md-table-row>
+      </md-table-body>
+    </md-table>
     <form @submit.prevent="submit">
       <div>
         <label>
