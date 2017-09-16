@@ -11,12 +11,12 @@
         </md-table-row>
       </md-table-header>
       <transition-group name="list" tag="md-table-body">
-        <md-table-row v-for="node in nodes">
-          <md-table-head>
+        <md-table-row v-for="node in sortedNodes" key="node.id">
+          <md-table-cell>
             <router-link :to="`/nodes/${node.id}`">
               {{ node.id }}
             </router-link>
-          </md-table-head>
+          </md-table-cell>
           <md-table-cell>
             <router-link :to="`/nodes/${node.id}`">{{ node.name }}</router-link>
           </md-table-cell>
@@ -63,47 +63,72 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      nodes: [],
-      images: [],
-      newNode: {
-        name: '',
-        image_id: 0,
-        mac_address: '',
-      },
-    };
-  },
-  methods: {
-    fetch() {
-      return this.$http.get('/nodes').then(resp => {
-        this.nodes = resp.data.sort((a, b) => {
-          return new Date(b.updated_at) - new Date(a.updated_at);
-        });
-      });
-    },
-    submit() {
-      return this.$http.post('/nodes', this.newNode).then(resp => {
-        this.nodes.unshift(resp.data);
-        this.newNode = {
+  export default {
+    data() {
+      return {
+        nodes: [],
+        images: [],
+        newNode: {
           name: '',
           image_id: 0,
           mac_address: '',
-        };
-      });
+        },
+      };
     },
-    fetchImages() {
-      return this.$http.get('/images').then(resp => {
-        this.images = resp.data;
-      });
+    computed: {
+      sortedNodes() {
+        return this.nodes.sort((a, b) => {
+          new Date(b.updated_at) - new Date(a.updated_at);
+        });
+      },
     },
-  },
-  mounted() {
-    this.fetch();
-    this.fetchImages();
-  },
-};
+    sockets: {
+      node(node) {
+        this.nodes = this.nodes.map(i => {
+          if (i.id === node.id) {
+            return node;
+          }
+          return i;
+        });
+      },
+      image(image) {
+        this.images = this.images.map(i => {
+          if (i.id === image.id) {
+            return image;
+          }
+          return i;
+        });
+      },
+    },
+    methods: {
+      fetch() {
+        return this.$http.get('/nodes').then(resp => {
+          this.nodes = resp.data;
+        });
+      },
+      submit() {
+        return this.$http.post('/nodes', this.newNode).then(resp => {
+          let node = resp.data;
+          node.image = this.images.find(i => i.id === node.image_id);
+          this.nodes.unshift(node);
+          this.newNode = {
+            name: '',
+            image_id: 0,
+            mac_address: '',
+          };
+        });
+      },
+      fetchImages() {
+        return this.$http.get('/images').then(resp => {
+          this.images = resp.data;
+        });
+      },
+    },
+    mounted() {
+      this.fetch();
+      this.fetchImages();
+    },
+  };
 </script>
 
 <style scoped>
