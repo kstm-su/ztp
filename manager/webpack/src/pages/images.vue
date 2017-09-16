@@ -94,8 +94,8 @@
         });
       },
     },
-    sockets:{
-      image(image){
+    sockets: {
+      image(image) {
         this.images = this.images.map(i => {
           if (i.id === image.id) {
             return image;
