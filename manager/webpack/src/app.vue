@@ -52,6 +52,18 @@
     }
   }
 
+  .null {
+    opacity: .5;
+  }
+
+  .color-red {
+    color: #f44336;
+  }
+
+  .color-green {
+    color: #4caf50;
+  }
+
   .main-header {
     .nav-trigger {
       @media (min-width: 1281px) {

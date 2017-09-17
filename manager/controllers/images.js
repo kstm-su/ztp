@@ -50,4 +50,14 @@ router.put('/:id', (req, res, next) => {
     .catch(err => next(err));
 });
 
+router.delete('/:id', (req, res, next) => {
+  models.Images.destroy({
+    where: {
+      id: {
+        $eq: req.params.id,
+      },
+    },
+  }).then(() => res.status(204).send());
+});
+
 module.exports = router;

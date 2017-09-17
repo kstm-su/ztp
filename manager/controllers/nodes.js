@@ -33,8 +33,23 @@ router.put('/:id', (req, res, next) => {
     if (node == null) {
       return next();
     }
-    node.update(req.body).then(node => res.json(node)).catch(err => next(err));
+    node.update(req.body)
+      .then(node => {
+        req.io.emit('node', node);
+        res.json(node);
+      })
+      .catch(err => next(err));
   });
+});
+
+router.delete('/:id', (req, res, next) => {
+  models.Nodes.destroy({
+    where: {
+      id: {
+        $eq: req.params.id,
+      },
+    },
+  }).then(() => res.status(204).send());
 });
 
 module.exports = router;
