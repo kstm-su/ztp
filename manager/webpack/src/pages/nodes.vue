@@ -22,7 +22,7 @@
           </md-table-cell>
           <md-table-cell>
             <span v-if="node.image == null" class="null">null</span>
-            <router-link v-else :to="`/images/${node.image.id}`">{{ node.image.id }}: {{ node.image.name }}</router-link>
+            <router-link v-else :to="`/images/${node.image.id}`">#{{ node.image.id }}: {{ node.image.name }}</router-link>
           </md-table-cell>
           <md-table-cell>{{ node.mac_address }}</md-table-cell>
           <md-table-cell>
@@ -44,7 +44,7 @@
           image
           <select v-model="newNode.image_id">
             <option v-for="image in images" :value="image.id">
-              {{ image.id }}: {{ image.name }}
+              #{{ image.id }}: {{ image.name }}
             </option>
           </select>
         </label>
