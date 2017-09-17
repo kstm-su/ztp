@@ -18,7 +18,7 @@
         <md-table-header>
           <md-table-row>
             <md-table-head>#</md-table-head>
-            <md-table-head>name</md-table-head>
+            <md-table-head>host name</md-table-head>
             <md-table-head>image</md-table-head>
             <md-table-head>MAC address</md-table-head>
             <md-table-head>IP address</md-table-head>
