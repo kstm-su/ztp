@@ -25,7 +25,15 @@
           </md-table-row>
         </md-table-header>
         <transition-group name="list" tag="md-table-body">
-          <md-table-row v-for="image in sortedImages" :key="image.id" :id="`image-${image.id}`" class="list-item" :md-item="image" md-selection md-auto-select>
+          <md-table-row
+            v-for="image in sortedImages"
+            :key="image.id"
+            :id="`image-${image.id}`"
+            class="list-item"
+            :md-item="image"
+            md-selection
+            md-auto-select
+          >
             <md-table-cell>{{ image.id }}</md-table-cell>
             <md-table-cell>{{ image.name }}</md-table-cell>
             <md-table-cell>{{ image.description }}</md-table-cell>
@@ -88,7 +96,13 @@
         <md-button class="md-primary" @click="submit">OK</md-button>
       </md-dialog-actions>
     </md-dialog>
-    <md-dialog-confirm md-title="delete images" md-content="Are you sure to delete?" ref="confirmDeleteDialog" @close="deleteSelectedImages"></md-dialog-confirm>
+    <md-dialog-confirm
+      md-title="delete images"
+      md-content="Are you sure to delete?"
+      ref="confirmDeleteDialog"
+      @close="deleteSelectedImages"
+    >
+    </md-dialog-confirm>
   </div>
 </template>
 
