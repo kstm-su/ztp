@@ -41,7 +41,7 @@
                 <md-option v-for="image in images" v-model="image.id">#{{ image.id }}: {{ image.name }}</md-option>
               </md-select>
             </md-table-cell>
-            <md-table-cell>{{ node.mac_address }}</md-table-cell>
+            <md-table-cell>{{ node.mac_address.toUpperCase() }}</md-table-cell>
             <md-table-cell>
               <span v-if="node.ip_address == null" class="null">null</span>
               <span v-else>{{ node.ip_address }}</span>
