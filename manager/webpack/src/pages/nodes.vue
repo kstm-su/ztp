@@ -38,7 +38,7 @@
             <md-table-cell>{{ node.name }}</md-table-cell>
             <md-table-cell>
               <span v-if="node.image == null" class="null">null</span>
-              <span v-else>image#{{ node.image.id }}: {{ node.image.name }}</span>
+              <span v-else>#{{ node.image.id }}: {{ node.image.name }}</span>
             </md-table-cell>
             <md-table-cell>{{ node.mac_address }}</md-table-cell>
             <md-table-cell>
