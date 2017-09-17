@@ -17,7 +17,7 @@
       <md-table ref="table">
         <md-table-header>
           <md-table-row>
-            <md-table-head >#</md-table-head>
+            <md-table-head>#</md-table-head>
             <md-table-head>name</md-table-head>
             <md-table-head>description</md-table-head>
             <md-table-head>size</md-table-head>
