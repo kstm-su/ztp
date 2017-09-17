@@ -32,7 +32,6 @@
             class="list-item"
             :md-item="image"
             md-selection
-            md-auto-select
           >
             <md-table-cell>{{ image.id }}</md-table-cell>
             <md-table-cell>{{ image.name }}</md-table-cell>
