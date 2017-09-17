@@ -42,4 +42,14 @@ router.put('/:id', (req, res, next) => {
   });
 });
 
+router.delete('/:id', (req, res, next) => {
+  models.Nodes.destroy({
+    where: {
+      id: {
+        $eq: req.params.id,
+      },
+    },
+  }).then(() => res.status(204).send());
+});
+
 module.exports = router;
