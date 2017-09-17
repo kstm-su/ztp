@@ -32,13 +32,14 @@
             class="list-item"
             :md-item="node"
             md-selection
-            md-auto-select
           >
             <md-table-cell>{{ node.id }}</md-table-cell>
             <md-table-cell>{{ node.name }}</md-table-cell>
             <md-table-cell>
-              <span v-if="node.image == null" class="null">null</span>
-              <span v-else>#{{ node.image.id }}: {{ node.image.name }}</span>
+              <md-select v-model="node.image_id" @change="change(node)">
+                <md-option class="null" :value="null">&lt;null&gt;</md-option>
+                <md-option v-for="image in images" v-model="image.id">#{{ image.id }}: {{ image.name }}</md-option>
+              </md-select>
             </md-table-cell>
             <md-table-cell>{{ node.mac_address }}</md-table-cell>
             <md-table-cell>
@@ -71,6 +72,7 @@
           <md-input-container>
             <label>image</label>
             <md-select v-model="editing.image_id">
+              <md-option class="null" :value="null">&lt;null&gt;</md-option>
               <md-option v-for="image in sortedImages" v-model="image.id">
                 #{{ image.id }}: {{ image.name }}
               </md-option>
@@ -105,7 +107,7 @@
         images: [],
         newNode: {
           name: '',
-          image_id: 0,
+          image_id: null,
           mac_address: '',
         },
         editing: {},
@@ -132,7 +134,6 @@
     sockets: {
       node(node) {
         node.image = this.images.find(image => image.id === node.image_id);
-        console.log(node);
         this.nodes = this.nodes.map(i => {
           if (i.id === node.id) {
             return node;
@@ -162,7 +163,7 @@
             this.nodes.unshift(resp.data);
             this.newNode = {
               name: '',
-              image_id: 0,
+              image_id: null,
               mac_address: '',
             };
             this.closeEditDialog();
@@ -193,6 +194,10 @@
       edit(node) {
         this.editing = node;
         this.$refs.editDialog.open();
+      },
+      change(node) {
+        this.editing = node;
+        this.submit();
       },
       closeEditDialog() {
         this.$refs.editDialog.close();
