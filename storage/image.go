@@ -54,6 +54,7 @@ func (i *Image) Build() error {
 		i.Error = &errStr
 		return err
 	}
+	m.Trust = moby.TrustConfig{}
 	buf := new(bytes.Buffer)
 	if err := moby.Build(m, buf, false, ""); err != nil {
 		errStr := err.Error()
