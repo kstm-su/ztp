@@ -57,11 +57,11 @@
   }
 
   .color-red {
-    color: red;
+    color: #f44336;
   }
 
   .color-green {
-    color: green;
+    color: #4caf50;
   }
 
   .main-header {
