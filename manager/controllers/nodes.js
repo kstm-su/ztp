@@ -33,7 +33,12 @@ router.put('/:id', (req, res, next) => {
     if (node == null) {
       return next();
     }
-    node.update(req.body).then(node => res.json(node)).catch(err => next(err));
+    node.update(req.body)
+      .then(node => {
+        req.io.emit('node', node);
+        res.json(node);
+      })
+      .catch(err => next(err));
   });
 });
 
