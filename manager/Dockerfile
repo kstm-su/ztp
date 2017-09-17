@@ -4,7 +4,7 @@ ADD ./package.json ./package.json
 ADD ./webpack/package.json ./webpack/package.json
 RUN yarn install && cd webpack && yarn install
 ADD . .
-RUN cd webpack npm run build && cd .. && rm -rf webpack
+RUN cd webpack && npm run build && cd .. && rm -rf webpack
 
 ENV PORT=8080
 EXPOSE 8080
