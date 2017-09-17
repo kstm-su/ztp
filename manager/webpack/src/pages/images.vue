@@ -141,11 +141,6 @@
           }
           return i;
         });
-        console.log(this.sortedImages.map(i => ({
-          id: i.id,
-          updated_at: i.updated_at,
-          date: new Date(i.updated_at) - 0,
-        })));
       },
     },
     methods: {
@@ -181,7 +176,7 @@
         }
         this.$refs.table.selectedRows.forEach(image => {
           this.$http.delete(`/images/${image.id}`).then(resp => {
-            this.images = this.images.filter(i => i.id !== image.id);
+            this.images = this.images.filter(v => i.id !== image.id);
           });
         });
       },
