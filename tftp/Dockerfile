@@ -3,4 +3,4 @@ RUN apk add --no-cache tftp-hpa syslinux
 ENV TFTP_ROOT=/var/tftpboot
 EXPOSE 69/udp
 ENTRYPOINT ["in.tftpd"]
-CMD ["-L", "-v", "-s", "/"]
+CMD ["-L", "-v"]
