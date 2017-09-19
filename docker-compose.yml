@@ -60,7 +60,7 @@ services:
     image: kstm/ztp:tftp
 #   build: tftp
     environment:
-      INTFTPD_PATH: /images
+      TFTP_ROOT: /images
     network_mode: host
     volumes:
       - ./images:/images:ro
