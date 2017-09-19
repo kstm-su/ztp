@@ -1,6 +1,6 @@
 FROM alpine:3.6
-RUN apk add --no-cache rsyslog tftp-hpa syslinux
-ADD entrypoint.sh /entrypoint.sh
+RUN apk add --no-cache tftp-hpa syslinux
 ENV TFTP_ROOT=/var/tftpboot
 EXPOSE 69/udp
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["in.tftpd"]
+CMD ["-L", "-v", "-s", "/"]

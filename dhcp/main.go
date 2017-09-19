@@ -50,7 +50,7 @@ func main() {
 				reply := &server.ACKReply{
 					Lease: lease,
 					Options: dhcp.Options{
-						dhcp.OptionBootFileName: []byte(fmt.Sprintf("%d/syslinux/pxelinux.0", node.Image.ID)),
+						dhcp.OptionBootFileName: []byte(node.Image.Path + "/syslinux/pxelinux.0"),
 						dhcp.OptionHostName:     []byte(node.Name),
 					},
 				}

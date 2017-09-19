@@ -59,8 +59,6 @@ services:
   tftp:
     image: kstm/ztp:tftp
 #   build: tftp
-    environment:
-      TFTP_ROOT: /images
     network_mode: host
     volumes:
       - ./images:/images:ro
