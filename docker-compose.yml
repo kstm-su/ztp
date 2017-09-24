@@ -10,7 +10,7 @@ services:
       NODE_MODULE: pg
       STORAGE_URL: http://storage:3000
     ports:
-      - 8080
+      - "${MANAGER_PORT}:8080"
     volumes:
       - ./tmp/run:/run
   db:
@@ -23,21 +23,10 @@ services:
     image: kstm/ztp:dhcp
 #   build: dhcp
     network_mode: host
+    env_file: .env
     environment:
       API_URL: http://manager:8080/api
       API_SOCKET: /run/manager.sock
-      DHCP_SERVER_IP_ADDR: 192.168.100.1
-      DHCP_START_IP_ADDR: 192.168.100.2
-      DHCP_LEASE_RANGE: 50
-      DHCP_INTERFACE: ens192
-      DHCP_OPTIONS: |
-        SubnetMask: 255.255.255.0
-        Router:
-          - 192.168.100.1
-        DomainNameServer:
-          - 8.8.8.8
-          - 8.8.4.4
-        DomainName: ztp.kstm.cloud
     ports:
       - 67:67/udp
     volumes:
