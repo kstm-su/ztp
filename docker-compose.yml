@@ -50,7 +50,7 @@ services:
       - ./tmp/moby:/tmp/moby
       - ./images:/images
     ports:
-      - "${STORAGE_PORT}:3000"
+        - 3000
     environment:
       PORT: 3000
       API_URL: http://manager:8080/api
