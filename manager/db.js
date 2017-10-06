@@ -37,9 +37,8 @@ var standByRequest = {
 sequelize.authenticate().then(() => {
   console.log('success to connect db');
   require('./models').migration();
-}).then(() => {
-  createStandby(standByRequest);
-}).catch(err => {
+  return standByRequest
+}).then(createStandby).catch(err => {
   console.error('unable to connect db:', err);
   process.exit();
 });
