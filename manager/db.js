@@ -31,7 +31,7 @@ const standByRequest = {
 	config: standByConfig,
 	description: 'An image to registrate mac address and stand by user action',
 	size: 512,
-	build: true
+	build: true,
 };
 
 sequelize.authenticate().then(() => {
