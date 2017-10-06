@@ -16,7 +16,7 @@ const createStandby = (config) => {
         .then(image => axios.post(url, image))
         .catch(console.error);
     } else {
-        console.log('There is a standby image before')
+        console.log('There is a standby image before');
     }
   });
 };
@@ -37,7 +37,7 @@ const standByRequest = {
 sequelize.authenticate().then(() => {
   console.log('success to connect db');
   require('./models').migration();
-  return standByRequest
+  return standByRequest;
 }).then(createStandby).catch(err => {
   console.error('unable to connect db:', err);
   process.exit();
