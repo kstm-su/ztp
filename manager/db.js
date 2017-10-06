@@ -26,7 +26,7 @@ const standByConfig = fs.readFileSync('./standby.conf', 'utf8')
 	.replace("${lease_range}", process.env.DHCP_LEASE_RANGE)
 	.replace("${manager_addr}", `${process.env.DHCP_SERVER_IP_ADDR}:${process.env.MANAGER_PORT}`);
 
-var standByRequest = {
+const standByRequest = {
 	name: 'Image for standby',
 	config: standByConfig,
 	description: 'An image to registrate mac address and stand by user action',
