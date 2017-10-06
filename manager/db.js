@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const url = `${process.env.STORAGE_URL}/images`;
 
-createStandby = (config) => {
+const createStandby = (config) => {
   require('./models').Images.findAll().then(images => {
     console.log(images);
     if(images.length == 0){
@@ -19,7 +19,7 @@ createStandby = (config) => {
         });
     }
   });
-}
+};
 
 var standByConfig = fs.readFileSync('./standby.conf', "utf8");
 standByConfig = standByConfig.replace("${start_ip}", `${process.env.DHCP_START_IP_ADDR}`);
