@@ -69,7 +69,6 @@ func main() {
 				fmt.Println("found")
 				macAddress = i.HardwareAddr.String()
 			}
-			// process IP address
 		}
 	}
 	if macAddress == "" {
