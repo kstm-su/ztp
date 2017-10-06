@@ -21,11 +21,7 @@ func ipToNumber(ip net.IP) uint {
 		}
 		return ipNumber
 	}
-	//IPv6
-	for i := 0; i < 16; i += 2 {
-		ipNumber = (ipNumber << 16) + uint((uint32(p[i])<<8)|uint32(p[i+1]))
-	}
-	return ipNumber
+	return 0
 }
 
 func isInLeaseRange(start net.IP, leaseRange uint, target net.IP) bool {
