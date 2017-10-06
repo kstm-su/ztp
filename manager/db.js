@@ -9,14 +9,12 @@ const createStandby = (config) => {
   require('./models').Images.findAll().then(images => {
     console.log(images);
     if (images.length == 0){
-      console.log("Create image stand by dhcp");
+      console.log('Create image stand by dhcp');
       console.log(config);
       require('./models').Images.create(config)
         .then(image => image.get({ plain: true }))
         .then(image => axios.post(url, image))
-        .catch(err => {
-          console.log(err);
-        });
+        .catch(console.error);
     } else {
         console.log("There is a standby image before")
     }
