@@ -15,13 +15,14 @@ import (
 func ipToNumber(ip net.IP) uint {
 	p := ip
 	var ipNumber uint = 0
-	if p4 := p.To4(); len(p4) == 4 {
-		for _, p := range p4 {
-			ipNumber = ipNumber*256 + uint(p)
-		}
-		return ipNumber
+	p4 := p.To4()
+	if len(p4) != 4 {
+		return 0
 	}
-	return 0
+	for _, p := range p4 {
+		ipNumber = ipNumber*256 + uint(p)
+	}
+	return ipNumber
 }
 
 func isInLeaseRange(start net.IP, leaseRange uint, target net.IP) bool {
