@@ -54,7 +54,8 @@ func main() {
 	for _, i := range interfaces {
 		addrs, err := i.Addrs()
 		if err != nil {
-			log.Fatal("Cannot fetch address of interface")
+			log.Println("Cannot fetch address of interface")
+			continue
 		}
 		for _, addr := range addrs {
 			var ip net.IP
