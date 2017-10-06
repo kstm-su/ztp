@@ -22,8 +22,8 @@ const createStandby = (config) => {
 };
 
 const standByConfig = fs.readFileSync('./standby.conf', 'utf8')
-	.replace("${start_ip}", `${process.env.DHCP_START_IP_ADDR}`)
-	.replace("${lease_range}", `${process.env.DHCP_LEASE_RANGE}`)
+	.replace("${start_ip}", process.env.DHCP_START_IP_ADDR)
+	.replace("${lease_range}", process.env.DHCP_LEASE_RANGE)
 	.replace("${manager_addr}", `${process.env.DHCP_SERVER_IP_ADDR}:${process.env.MANAGER_PORT}`);
 
 var standByRequest = {
