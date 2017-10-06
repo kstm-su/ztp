@@ -17,6 +17,8 @@ const createStandby = (config) => {
         .catch(err => {
           console.log(err);
         });
+    } else {
+        console.log("There is a standby image before")
     }
   });
 };
@@ -38,7 +40,6 @@ sequelize.authenticate().then(() => {
   console.log('success to connect db');
   require('./models').migration();
 }).then(() => {
-  console.log("creating stand by image");
   createStandby(standByRequest);
 }).catch(err => {
   console.error('unable to connect db:', err);
