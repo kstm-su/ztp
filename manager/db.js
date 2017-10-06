@@ -26,7 +26,13 @@ standByConfig = standByConfig.replace("${start_ip}", `${process.env.DHCP_START_I
 	.replace("${lease_range}", `${process.env.DHCP_LEASE_RANGE}`)
 	.replace("${manager_addr}", `${process.env.DHCP_SERVER_IP_ADDR}:${process.env.MANAGER_PORT}`);
 
-var standByRequest = {name: 'Image for standby', config: standByConfig, description: 'An image to registrate mac address and stand by user action', size: 512, build: true};
+var standByRequest = {
+	name: 'Image for standby',
+	config: standByConfig,
+	description: 'An image to registrate mac address and stand by user action',
+	size: 512,
+	build: true
+};
 
 sequelize.authenticate().then(() => {
   console.log('success to connect db');
