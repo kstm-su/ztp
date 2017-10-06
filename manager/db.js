@@ -16,7 +16,7 @@ const createStandby = (config) => {
         .then(image => axios.post(url, image))
         .catch(console.error);
     } else {
-        console.log("There is a standby image before")
+        console.log('There is a standby image before')
     }
   });
 };
