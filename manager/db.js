@@ -8,7 +8,7 @@ const url = `${process.env.STORAGE_URL}/images`;
 const createStandby = config => {
   require('./models').Images.findAll().then(images => {
     console.log(images);
-    if (images.length == 0){
+    if (images.length == 0) {
       console.log('Create image stand by dhcp');
       console.log(config);
       require('./models').Images.create(config)
