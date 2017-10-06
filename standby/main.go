@@ -43,7 +43,7 @@ func main() {
 
 	hostName, err := os.Hostname()
 	if err != nil {
-		panic(err)
+		log.Fatal("Cannot fetch hostname")
 	}
 
 	interfaces, err := net.Interfaces()
