@@ -3,6 +3,7 @@ services:
   manager:
     image: kstm/ztp:manager
 #   build: manager
+    env_file: .env
     environment:
       PORT: 8080
       SOCKET: /run/manager.sock

@@ -6,4 +6,5 @@
 !models
 !controllers
 !webpack
+!standby.conf
 webpack/node_modules

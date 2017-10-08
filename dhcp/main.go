@@ -44,6 +44,12 @@ func main() {
 			fmt.Println(err)
 			return &server.NAKReply{}
 		}
+		images := []image{}
+		_, _, err = client.Get(apiURL + "/images").EndStruct(&images)
+		if err != nil {
+			fmt.Println(err)
+			return &server.NAKReply{}
+		}
 		for _, node := range nodes {
 			if strings.ToLower(node.MACAddress) == macAddr {
 				fmt.Printf("node: %+v\n", node)
@@ -60,7 +66,16 @@ func main() {
 				return reply
 			}
 		}
-		return nil
+		fmt.Println("It's booted from the standby image")
+		reply := &server.ACKReply{
+			Lease: lease,
+			Options: dhcp.Options{
+				dhcp.OptionBootFileName: []byte(images[0].Path + "/syslinux/pxelinux.0"),
+				dhcp.OptionHostName:     []byte(images[0].Name),
+			},
+		}
+		fmt.Printf("reply: %+v\n", reply)
+		return reply
 	})
 	if err == nil {
 		fmt.Printf("%+v\n", s.Handler)
