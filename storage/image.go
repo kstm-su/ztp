@@ -81,7 +81,7 @@ func (i *Image) Build() error {
 		return err
 	}
 
-	if err := moby.Formats(path+"/linuxkit", buf.Bytes(), imageTypes, i.Size, false); err != nil {
+	if err := moby.Formats(path+"/linuxkit", buf.Bytes(), imageTypes, i.Size); err != nil {
 		errStr := err.Error()
 		i.Error = &errStr
 		return err
