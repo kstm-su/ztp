@@ -31,5 +31,3 @@ before_install:
 script:
   - docker-compose build
 
-after_script:
-  - docker-compose down
