@@ -25,6 +25,8 @@ before_install:
   # doing out-of-the-ordinary docker-compose builds.
   - docker-compose pull
 
+  - cp .env{.sample,}
+
 script:
   - docker-compose up --build
 
