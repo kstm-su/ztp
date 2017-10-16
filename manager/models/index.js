@@ -7,8 +7,13 @@ Images.hasMany(Nodes);
 module.exports = {
   Images,
   Nodes,
-  migration() {
-    Images.sync();
-    Nodes.sync();
+  migration(succ, err) {
+    var pImages = new Promise((resolve, reject) => {
+      Images.sync().then(resolve).catch(reject);
+    });
+    var pNodes = new Promise((resolve, reject) => {
+      Nodes.sync().then(resolve).catch(reject);
+    });
+    Promise.all([pImages, pNodes]).then(succ).catch(err);
   },
 };
