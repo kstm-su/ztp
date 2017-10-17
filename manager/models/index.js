@@ -8,7 +8,6 @@ module.exports = {
   Images,
   Nodes,
   migration() {
-    console.log("migration");
     return Promise.all([Images.sync(), Nodes.sync()]);
-  }
-}
+  },
+};
