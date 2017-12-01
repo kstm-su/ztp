@@ -3,7 +3,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL || 'sqlite://db.sqlite3
 const axios = require('axios');
 const fs = require('fs');
 
-const url = `${process.env.STORAGE_URL}/images`;
+const url = `${process.env.BUILDER_URL}/images`;
 
 const createStandby = config => {
   require('./models').Images.findAll().then(images => {

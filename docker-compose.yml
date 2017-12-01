@@ -9,7 +9,7 @@ services:
       SOCKET: /run/manager.sock
       DATABASE_URL: postgres://ztp:ztp@db:5432/ztp?sslmode=disable
       NODE_MODULE: pg
-      STORAGE_URL: http://storage:3000
+      BUILDER_URL: http://builder:3000
     ports:
       - "${MANAGER_PORT}:8080"
     volumes:
@@ -32,9 +32,9 @@ services:
       - 67:67/udp
     volumes:
       - ./tmp/run:/run:ro
-  storage:
-    image: kstm/ztp:storage
-#   build: storage
+  builder:
+    image: kstm/ztp:builder
+#   build: builder
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./tmp/moby:/tmp/moby
