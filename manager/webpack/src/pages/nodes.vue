@@ -38,7 +38,7 @@
             <md-table-cell>
               <md-select v-model="node.image_id" @change="change(node)">
                 <md-option class="null" :value="null">&lt;null&gt;</md-option>
-                <md-option v-for="image in images" v-model="image.id">#{{ image.id }}: {{ image.name }}</md-option>
+                <md-option v-for="image in images" :key="image.id" :value="image.id">#{{ image.id }}: {{ image.name }}</md-option>
               </md-select>
             </md-table-cell>
             <md-table-cell>{{ node.mac_address.toUpperCase() }}</md-table-cell>
@@ -73,7 +73,7 @@
             <label>image</label>
             <md-select v-model="editing.image_id">
               <md-option class="null" :value="null">&lt;null&gt;</md-option>
-              <md-option v-for="image in sortedImages" v-model="image.id">
+              <md-option v-for="image in sortedImages" :key="image.id" :value="image.id">
                 #{{ image.id }}: {{ image.name }}
               </md-option>
             </md-select>
