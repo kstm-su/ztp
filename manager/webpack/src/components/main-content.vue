@@ -4,7 +4,7 @@
       <md-button class="md-icon-button nav-trigger" @click="$parent.toggleMainSidebar">
         <md-icon>menu</md-icon>
       </md-button>
-      <h2 class="md-title">kstm ZTP system</h2>
+      <h2 class="md-title">kstm ZTP</h2>
     </md-whiteframe>
     <div class="page">
       <transition name="router" mode="out-in" appear>
