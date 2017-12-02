@@ -3,7 +3,7 @@ const axios = require('axios');
 const models = require('../models');
 
 const router = express.Router();
-const url = `${process.env.STORAGE_URL}/images`;
+const url = `${process.env.BUILDER_URL}/images`;
 
 router.get('/', (req, res) => {
   models.Images.findAll().then(images => res.json(images));
