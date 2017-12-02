@@ -39,11 +39,11 @@
             <md-table-cell>{{ image.size }}MB</md-table-cell>
             <md-table-cell>
               <transition name="status" mode="out-in">
-                <span v-if="image.error" key="error">
+                <span v-if="image.error" key="error" @click="viewLog(image.error + '\n\n' + image.log)">
                   <md-icon class="color-red">error</md-icon>
                   error
                 </span>
-                <span v-else-if="image.path" key="ready">
+                <span v-else-if="image.path" key="ready" @click="viewLog(image.log)">
                   <md-icon class="color-green">check_circle</md-icon>
                   ready
                 </span>
@@ -193,6 +193,9 @@
       closeEditDialog() {
         this.$refs.editDialog.close();
         this.editing = {};
+      },
+      viewLog(log) {
+        window.alert(log);
       },
     },
     mounted() {

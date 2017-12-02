@@ -26,6 +26,11 @@ const Images = db.define('images', {
     type: Sequelize.TEXT,
     allowNull: true,
   },
+  log: {
+    type: Sequelize.TEXT,
+    allowNull: false,
+    defaultValue: '',
+  },
 }, {
   timestamps: true,
   underscored: true,
