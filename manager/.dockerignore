@@ -1,10 +1,15 @@
 *
 !index.js
 !package.json
+!yarn.lock
 !db.js
 !entrypoint.sh
 !models
 !controllers
 !webpack
 !standby.conf
-webpack/node_modules
+webpack/*
+!webpack/package.json
+!webpack/webpack.config.js
+!webpack/yarn.lock
+!webpack/src
