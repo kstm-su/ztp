@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/moby/tool/src/moby"
+	"github.com/kstm-su/moby-tool/src/moby"
 	"github.com/parnurzeal/gorequest"
 )
 
@@ -29,13 +29,13 @@ type Image struct {
 	Name        string  `json:"name"`
 	Description string  `json:"description"`
 	Error       *string `json:"error"`
+	Log         string  `json:"log"`
 }
 
 func init() {
 	moby.MobyDir = os.Getenv("TEMPORARY_DIR")
 	outputDir = os.Getenv("OUTPUT_DIR")
 	apiURL = os.Getenv("API_URL")
-
 }
 
 func (i *Image) Append() {
@@ -48,6 +48,13 @@ func (i *Image) Append() {
 }
 
 func (i *Image) Build() error {
+	logBuf := bytes.Buffer{}
+	moby.SetLogOutput(&logBuf)
+	defer func() {
+		moby.SetLogOutput(os.Stdout)
+		i.Log = logBuf.String()
+	}()
+
 	m, err := moby.NewConfig([]byte(i.Config))
 	if err != nil {
 		errStr := err.Error()
