@@ -94,6 +94,8 @@ func (h *Handler) ServeDHCP(p dhcp.Packet, msgType dhcp.MessageType, options dhc
 		h.Leases.Delete(p.CHAddr())
 	}
 	delete(processing[msgType], p.CHAddr().String())
-	replyPacket.SetSIAddr(h.ServerIPAddr)
+	if len(replyPacket) > 0 {
+		replyPacket.SetSIAddr(h.ServerIPAddr)
+	}
 	return
 }
