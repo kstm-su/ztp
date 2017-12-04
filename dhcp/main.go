@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/bgpat/dhcpd/server"
 	dhcp "github.com/krolaw/dhcp4"
+	"github.com/kstm-su/ztp/dhcp/server"
 	"github.com/parnurzeal/gorequest"
 )
 

@@ -1,2 +1,3 @@
 *
 !main.go
+!server/*.go
