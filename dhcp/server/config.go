@@ -39,7 +39,7 @@ func NewConfig() (*Config, error) {
 	return &c, nil
 }
 
-func (c *Config) Server(change func(*Lease) Reply) *Server {
+func (c *Config) Server(handler func(*Lease) Reply) *Server {
 	return &Server{
 		Handler: &Handler{
 			ServerIPAddr: net.ParseIP(c.Server_IP_Addr).To4(),
@@ -49,7 +49,7 @@ func (c *Config) Server(change func(*Lease) Reply) *Server {
 				Range:       c.Lease_Range,
 				Duration:    c.Lease_Duration,
 			},
-			Change: change,
+			handlerFunc: handler,
 		},
 		Interface: c.Interface,
 	}

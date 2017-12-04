@@ -9,12 +9,12 @@ type Server struct {
 	Interface *string
 }
 
-func New(change func(*Lease) Reply) (*Server, error) {
+func New(handler func(*Lease) Reply) (*Server, error) {
 	config, err := NewConfig()
 	if err != nil {
 		return nil, err
 	}
-	return config.Server(change), nil
+	return config.Server(handler), nil
 }
 
 func (s *Server) Listen() error {

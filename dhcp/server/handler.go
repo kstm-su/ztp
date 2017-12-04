@@ -12,7 +12,7 @@ type Handler struct {
 	ServerIPAddr net.IP
 	Options      dhcp.Options
 	Leases       Leases
-	Change       func(*Lease) Reply
+	handlerFunc  func(*Lease) Reply
 }
 
 var processing = map[dhcp.MessageType]map[string]struct{}{}
@@ -34,8 +34,8 @@ func (h *Handler) ServeDHCP(p dhcp.Packet, msgType dhcp.MessageType, options dhc
 		if lease == nil {
 			break
 		}
-		if h.Change != nil {
-			if reply := h.Change(lease); reply != nil {
+		if h.handlerFunc != nil {
+			if reply := h.handlerFunc(lease); reply != nil {
 				replyPacket = reply.Packet(p, msgType, h, options[dhcp.OptionParameterRequestList])
 				break
 			}
@@ -71,8 +71,8 @@ func (h *Handler) ServeDHCP(p dhcp.Packet, msgType dhcp.MessageType, options dhc
 			break
 		}
 		lease.Expiry = time.Now().Add(h.Leases.Duration)
-		if h.Change != nil {
-			if reply := h.Change(lease); reply != nil {
+		if h.handlerFunc != nil {
+			if reply := h.handlerFunc(lease); reply != nil {
 				replyPacket = reply.Packet(p, msgType, h, options[dhcp.OptionParameterRequestList])
 				break
 			}
