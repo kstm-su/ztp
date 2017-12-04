@@ -17,15 +17,13 @@ type Handler struct {
 
 var processing = map[dhcp.MessageType]map[string]struct{}{}
 
-func init() {
-	processing[dhcp.Discover] = map[string]struct{}{}
-	processing[dhcp.Request] = map[string]struct{}{}
-}
-
 func (h *Handler) ServeDHCP(p dhcp.Packet, msgType dhcp.MessageType, options dhcp.Options) (replyPacket dhcp.Packet) {
 	if _, ok := processing[msgType][p.CHAddr().String()]; ok {
 		log.Printf("%s: ignore %s\n", p.CHAddr().String(), msgType.String())
 		return
+	}
+	if _, ok := processing[msgType]; !ok {
+		processing[msgType] = map[string]struct{}{}
 	}
 	processing[msgType][p.CHAddr().String()] = struct{}{}
 	switch msgType {
