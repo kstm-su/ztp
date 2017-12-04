@@ -11,7 +11,7 @@ import (
 type Handler struct {
 	ServerIPAddr net.IP
 	Options      dhcp.Options
-	Leases       Leases
+	Leases       *Leases
 	handlerFunc  func(*Lease) Reply
 }
 
@@ -30,15 +30,20 @@ func (h *Handler) ServeDHCP(p dhcp.Packet, msgType dhcp.MessageType, options dhc
 	processing[msgType][p.CHAddr().String()] = struct{}{}
 	switch msgType {
 	case dhcp.Discover:
-		lease := h.Leases.Get(p.CHAddr())
-		if lease == nil {
-			break
+		lease := &Lease{
+			CHAddr: p.CHAddr(),
+			Expiry: time.Now().Add(h.Leases.Duration),
+			leases: h.Leases,
 		}
 		if h.handlerFunc != nil {
 			if reply := h.handlerFunc(lease); reply != nil {
 				replyPacket = reply.Packet(p, msgType, h, options[dhcp.OptionParameterRequestList])
 				break
 			}
+		}
+		lease = h.Leases.Get(p.CHAddr())
+		if lease == nil {
+			break
 		}
 		replyPacket = dhcp.ReplyPacket(
 			p,

@@ -44,7 +44,7 @@ func (c *Config) Server(handler func(*Lease) Reply) *Server {
 		Handler: &Handler{
 			ServerIPAddr: net.ParseIP(c.Server_IP_Addr).To4(),
 			Options:      dhcp.Options(c.Options),
-			Leases: Leases{
+			Leases: &Leases{
 				StartIPAddr: net.ParseIP(c.Start_IP_Addr).To4(),
 				Range:       c.Lease_Range,
 				Duration:    c.Lease_Duration,

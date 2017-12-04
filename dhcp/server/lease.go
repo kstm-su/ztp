@@ -19,6 +19,7 @@ type Lease struct {
 	CHAddr net.HardwareAddr
 	IPAddr net.IP
 	Expiry time.Time
+	leases *Leases
 }
 
 func (l *Leases) Initialize() {
@@ -37,6 +38,7 @@ func (l *Leases) Get(addr net.HardwareAddr) *Lease {
 			CHAddr: addr,
 			IPAddr: dhcp.IPAdd(l.StartIPAddr, i),
 			Expiry: time.Now().Add(l.Duration),
+			leases: l,
 		}
 		l.Table[i] = lease
 		return lease
@@ -51,4 +53,12 @@ func (l *Leases) Delete(addr net.HardwareAddr) {
 			break
 		}
 	}
+}
+
+func (l *Lease) Find() {
+	tmp := l.leases.Get(l.CHAddr)
+	if tmp == nil {
+		return
+	}
+	l = tmp
 }

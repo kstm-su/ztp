@@ -53,6 +53,18 @@ func main() {
 		for _, node := range nodes {
 			if strings.ToLower(node.MACAddress) == macAddr {
 				fmt.Printf("node: %+v\n", node)
+				if lease.IPAddr == nil {
+					nodeIP := net.ParseIP(node.IPAddress)
+					if nodeIP == nil {
+						lease.Find()
+						if lease == nil {
+							fmt.Println(err)
+							return &server.NAKReply{}
+						}
+					} else {
+						lease.IPAddr = nodeIP
+					}
+				}
 				reply := &server.ACKReply{
 					Lease: lease,
 					Options: dhcp.Options{
@@ -66,7 +78,12 @@ func main() {
 				return reply
 			}
 		}
-		fmt.Println("It's booted from the standby image")
+		fmt.Println("unknown MAC address: ", macAddr)
+		lease.Find()
+		if lease == nil {
+			fmt.Println(err)
+			return &server.NAKReply{}
+		}
 		reply := &server.ACKReply{
 			Lease: lease,
 			Options: dhcp.Options{
