@@ -62,3 +62,9 @@ func (l *Lease) Find() {
 	}
 	l = tmp
 }
+
+func (l *Lease) Update() {
+	l.Expiry = time.Now().Add(l.leases.Duration)
+	i := dhcp.IPRange(l.leases.StartIPAddr, l.IPAddr) - 1
+	l.leases.Table[i] = l
+}

@@ -63,6 +63,7 @@ func main() {
 						}
 					} else {
 						lease.IPAddr = nodeIP
+						lease.Update()
 					}
 				}
 				reply := &server.ACKReply{
