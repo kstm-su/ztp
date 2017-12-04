@@ -60,7 +60,7 @@ func (l *Lease) Find() {
 	if tmp == nil {
 		return
 	}
-	l = tmp
+	*l = *tmp
 }
 
 func (l *Lease) Update() {

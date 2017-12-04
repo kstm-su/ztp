@@ -15,17 +15,16 @@ type Handler struct {
 	handlerFunc  func(*Lease) Reply
 }
 
-var processing = map[dhcp.MessageType]map[string]struct{}{}
+var processing = map[string]struct{}{}
 
 func (h *Handler) ServeDHCP(p dhcp.Packet, msgType dhcp.MessageType, options dhcp.Options) (replyPacket dhcp.Packet) {
-	if _, ok := processing[msgType][p.CHAddr().String()]; ok {
+	if _, ok := processing[p.CHAddr().String()]; ok {
 		log.Printf("%s: ignore %s\n", p.CHAddr().String(), msgType.String())
 		return
 	}
-	if _, ok := processing[msgType]; !ok {
-		processing[msgType] = map[string]struct{}{}
-	}
-	processing[msgType][p.CHAddr().String()] = struct{}{}
+	processing[p.CHAddr().String()] = struct{}{}
+	defer delete(processing, p.CHAddr().String())
+	log.Println("message type: ", msgType)
 	switch msgType {
 	case dhcp.Discover:
 		lease := &Lease{
@@ -91,7 +90,6 @@ func (h *Handler) ServeDHCP(p dhcp.Packet, msgType dhcp.MessageType, options dhc
 	case dhcp.Release, dhcp.Decline:
 		h.Leases.Delete(p.CHAddr())
 	}
-	delete(processing[msgType], p.CHAddr().String())
 	if len(replyPacket) > 0 {
 		replyPacket.SetSIAddr(h.ServerIPAddr)
 	}

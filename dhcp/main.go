@@ -36,7 +36,6 @@ func main() {
 		}
 	}
 	s, err := server.New(func(lease *server.Lease) server.Reply {
-		fmt.Printf("lease: %+v\n", lease)
 		macAddr := lease.CHAddr.String()
 		nodes := []node{}
 		_, _, err := client.Get(apiURL + "/nodes").EndStruct(&nodes)
@@ -80,10 +79,12 @@ func main() {
 			}
 		}
 		fmt.Println("unknown MAC address: ", macAddr)
-		lease.Find()
-		if lease == nil {
-			fmt.Println(err)
-			return &server.NAKReply{}
+		if lease.IPAddr == nil {
+			lease.Find()
+			if lease == nil {
+				fmt.Println(err)
+				return &server.NAKReply{}
+			}
 		}
 		reply := &server.ACKReply{
 			Lease: lease,
@@ -93,6 +94,10 @@ func main() {
 			},
 		}
 		fmt.Printf("reply: %+v\n", reply)
+		go client.Post(fmt.Sprintf("%s/nodes", apiURL)).Send(node{
+			MACAddress: lease.CHAddr.String(),
+			IPAddress:  lease.IPAddr.String(),
+		}).End()
 		return reply
 	})
 	if err == nil {
