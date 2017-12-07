@@ -55,12 +55,13 @@ func (l *Leases) Delete(addr net.HardwareAddr) {
 	}
 }
 
-func (l *Lease) Find() {
+func (l *Lease) Find() bool {
 	tmp := l.leases.Get(l.CHAddr)
 	if tmp == nil {
-		return
+		return false
 	}
 	*l = *tmp
+	return true
 }
 
 func (l *Lease) Update() {

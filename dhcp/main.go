@@ -55,9 +55,8 @@ func main() {
 				if lease.IPAddr == nil {
 					nodeIP := net.ParseIP(node.IPAddress)
 					if nodeIP == nil {
-						lease.Find()
-						if lease == nil {
-							fmt.Println(err)
+						if !lease.Find() {
+							fmt.Println("No IP pool space available")
 							return &server.NAKReply{}
 						}
 					} else {
