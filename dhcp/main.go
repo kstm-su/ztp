@@ -71,7 +71,8 @@ func main() {
 					}
 				}
 				if node.Image.Path == "" {
-					node.Image = images[0]
+					node.Image.Path = "/images/default"
+					node.Name = ""
 				}
 				reply := &server.ACKReply{
 					Lease: lease,
@@ -96,8 +97,8 @@ func main() {
 		reply := &server.ACKReply{
 			Lease: lease,
 			Options: dhcp.Options{
-				dhcp.OptionBootFileName: []byte(images[0].Path + "/syslinux/pxelinux.0"),
-				dhcp.OptionHostName:     []byte(images[0].Name),
+				dhcp.OptionBootFileName: []byte("/images/default/syslinux/pxelinux.0"),
+				dhcp.OptionHostName:     []byte(""),
 			},
 		}
 		fmt.Printf("reply: %+v\n", reply)
