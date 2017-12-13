@@ -38,7 +38,7 @@ func (h *Handler) ServeDHCP(p dhcp.Packet, msgType dhcp.MessageType, options dhc
 				break
 			}
 		}
-		lease = h.Leases.Get(p.CHAddr())
+		lease = h.Leases.New(p.CHAddr())
 		if lease == nil {
 			break
 		}
@@ -88,7 +88,7 @@ func (h *Handler) ServeDHCP(p dhcp.Packet, msgType dhcp.MessageType, options dhc
 			h.Options.SelectOrderOrAll(options[dhcp.OptionParameterRequestList]),
 		)
 	case dhcp.Release, dhcp.Decline:
-		h.Leases.Delete(p.CHAddr())
+		h.Leases.Release(p.CHAddr())
 	}
 	if len(replyPacket) > 0 {
 		replyPacket.SetSIAddr(h.ServerIPAddr)
