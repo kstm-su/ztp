@@ -56,6 +56,15 @@ func (l *Leases) Delete(addr net.HardwareAddr) {
 	}
 }
 
+func (l *Leases) Use(ip net.IP, mac net.HardwareAddr) *Lease {
+	return &Lease{
+		CHAddr: mac,
+		IPAddr: ip,
+		Expiry: time.Now().Add(l.Duration),
+		leases: l,
+	}
+}
+
 func (l *Lease) Find() error {
 	tmp := l.leases.Get(l.CHAddr)
 	if tmp == nil {
