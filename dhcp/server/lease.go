@@ -2,6 +2,7 @@ package server
 
 import (
 	"bytes"
+	"errors"
 	"net"
 	"time"
 
@@ -55,13 +56,13 @@ func (l *Leases) Delete(addr net.HardwareAddr) {
 	}
 }
 
-func (l *Lease) Find() bool {
+func (l *Lease) Find() error {
 	tmp := l.leases.Get(l.CHAddr)
 	if tmp == nil {
-		return false
+		return errors.New("No IP pool space available")
 	}
 	*l = *tmp
-	return true
+	return nil
 }
 
 func (l *Lease) Update() {

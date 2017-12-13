@@ -55,8 +55,8 @@ func main() {
 				if lease.IPAddr == nil {
 					nodeIP := net.ParseIP(node.IPAddress)
 					if nodeIP == nil {
-						if !lease.Find() {
-							fmt.Println("No IP pool space available")
+						if err := lease.Find(); err != nil {
+							fmt.Println(err)
 							return &server.NAKReply{}
 						}
 					} else {
@@ -82,8 +82,7 @@ func main() {
 		}
 		fmt.Println("unknown MAC address: ", macAddr)
 		if lease.IPAddr == nil {
-			lease.Find()
-			if lease == nil {
+			if err := lease.Find(); err != nil {
 				fmt.Println(err)
 				return &server.NAKReply{}
 			}
