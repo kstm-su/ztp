@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/bgpat/dhcpd/server"
 	dhcp "github.com/krolaw/dhcp4"
+	"github.com/kstm-su/ztp/dhcp/server"
 	"github.com/parnurzeal/gorequest"
 )
 
@@ -36,7 +36,6 @@ func main() {
 		}
 	}
 	s, err := server.New(func(lease *server.Lease) server.Reply {
-		fmt.Printf("lease: %+v\n", lease)
 		macAddr := lease.CHAddr.String()
 		nodes := []node{}
 		_, _, err := client.Get(apiURL + "/nodes").EndStruct(&nodes)
@@ -53,6 +52,21 @@ func main() {
 		for _, node := range nodes {
 			if strings.ToLower(node.MACAddress) == macAddr {
 				fmt.Printf("node: %+v\n", node)
+				if lease.IPAddr == nil {
+					nodeIP := net.ParseIP(node.IPAddress)
+					if nodeIP == nil {
+						if !lease.Find() {
+							fmt.Println("No IP pool space available")
+							return &server.NAKReply{}
+						}
+					} else {
+						lease.IPAddr = nodeIP
+						lease.Update()
+					}
+				}
+				if node.Image.Path == "" {
+					node.Image = images[0]
+				}
 				reply := &server.ACKReply{
 					Lease: lease,
 					Options: dhcp.Options{
@@ -66,7 +80,14 @@ func main() {
 				return reply
 			}
 		}
-		fmt.Println("It's booted from the standby image")
+		fmt.Println("unknown MAC address: ", macAddr)
+		if lease.IPAddr == nil {
+			lease.Find()
+			if lease == nil {
+				fmt.Println(err)
+				return &server.NAKReply{}
+			}
+		}
 		reply := &server.ACKReply{
 			Lease: lease,
 			Options: dhcp.Options{
@@ -75,6 +96,10 @@ func main() {
 			},
 		}
 		fmt.Printf("reply: %+v\n", reply)
+		go client.Post(fmt.Sprintf("%s/nodes", apiURL)).Send(node{
+			MACAddress: lease.CHAddr.String(),
+			IPAddress:  lease.IPAddr.String(),
+		}).End()
 		return reply
 	})
 	if err == nil {
