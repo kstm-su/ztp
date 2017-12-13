@@ -27,7 +27,7 @@ func (l *Leases) Initialize() {
 	l.Table = make([]*Lease, l.Range)
 }
 
-func (l *Leases) Get(addr net.HardwareAddr) *Lease {
+func (l *Leases) New(addr net.HardwareAddr) *Lease {
 	if l.Table == nil {
 		l.Initialize()
 	}
@@ -47,7 +47,7 @@ func (l *Leases) Get(addr net.HardwareAddr) *Lease {
 	return nil
 }
 
-func (l *Leases) Delete(addr net.HardwareAddr) {
+func (l *Leases) Release(addr net.HardwareAddr) {
 	for _, lease := range l.Table {
 		if bytes.Compare(lease.CHAddr, addr) == 0 {
 			lease = nil
@@ -56,8 +56,17 @@ func (l *Leases) Delete(addr net.HardwareAddr) {
 	}
 }
 
+func (l *Leases) Use(ip net.IP, mac net.HardwareAddr) *Lease {
+	return &Lease{
+		CHAddr: mac,
+		IPAddr: ip,
+		Expiry: time.Now().Add(l.Duration),
+		leases: l,
+	}
+}
+
 func (l *Lease) Find() error {
-	tmp := l.leases.Get(l.CHAddr)
+	tmp := l.leases.New(l.CHAddr)
 	if tmp == nil {
 		return errors.New("No IP pool space available")
 	}

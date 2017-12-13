@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"os"
 	"strings"
@@ -27,9 +28,14 @@ type image struct {
 	Description string `json:"description"`
 }
 
+var (
+	client *gorequest.SuperAgent
+	apiURL string
+)
+
 func main() {
-	apiURL := os.Getenv("API_URL")
-	client := gorequest.New()
+	apiURL = os.Getenv("API_URL")
+	client = gorequest.New()
 	if socket := os.Getenv("API_SOCKET"); socket != "" {
 		client.Transport.Dial = func(_, _ string) (net.Conn, error) {
 			return net.Dial("unix", socket)
@@ -101,9 +107,31 @@ func main() {
 		}).End()
 		return reply
 	})
+	if err := restoreIPs(s); err != nil {
+		log.Fatalf("failed to restore leased IP addresses: %v\n", err)
+	}
 	if err == nil {
 		fmt.Printf("%+v\n", s.Handler)
 		err = s.Listen()
 	}
 	fmt.Fprintln(os.Stderr, err.Error())
+}
+
+func restoreIPs(s *server.Server) []error {
+	nodes := []node{}
+	if _, _, err := client.Get(apiURL + "/nodes").EndStruct(&nodes); err != nil {
+		return err
+	}
+	for _, node := range nodes {
+		ip := net.ParseIP(node.IPAddress)
+		if ip == nil {
+			return []error{fmt.Errorf("failed to parse IP addr of node#%d", node.ID)}
+		}
+		mac, err := net.ParseMAC(node.MACAddress)
+		if err != nil {
+			return []error{err}
+		}
+		s.Handler.Leases.Use(ip, mac).Update()
+	}
+	return nil
 }
