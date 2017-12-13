@@ -64,6 +64,9 @@ func main() {
 						lease.Update()
 					}
 				}
+				if node.Image.Path == "" {
+					node.Image = images[0]
+				}
 				reply := &server.ACKReply{
 					Lease: lease,
 					Options: dhcp.Options{
