@@ -98,7 +98,6 @@ func main() {
 			Lease: lease,
 			Options: dhcp.Options{
 				dhcp.OptionBootFileName: []byte("/default/syslinux/pxelinux.0"),
-				dhcp.OptionHostName:     []byte(""),
 			},
 		}
 		fmt.Printf("reply: %+v\n", reply)
